@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TargetMaster, PageMaster, ActionMaster, StepMaster, StepPageEntryMaster, StepDisplayPage
+from app.models import TargetMaster, PageMaster, ActionMaster, StepMaster, StepPageEntryMaster, StepDisplayPage
 
 
 class TargetMasterAdmin(admin.ModelAdmin):

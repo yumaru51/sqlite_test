@@ -3,6 +3,14 @@ from .models import TargetMaster
 
 
 def output_test(request):
+    from django.db import router
+    from fms.models import User
+    print(router.db_for_read(User))
+    print(router.db_for_write(User))
+
+    from django.contrib.auth.models import User
+    print(router.db_for_read(User))
+    print(router.db_for_write(User))
 
     data = {
         'output': TargetMaster.objects.all,

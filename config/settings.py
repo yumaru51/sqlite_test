@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.apps.AppConfig',
+    'fms.apps.FmsConfig',
+    'quality_change_management.apps.QualityChangeManagementConfig',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +80,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'fms': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'fms_db.sqlite3'),
+    },
+    'quality_change_management': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'quality_change_management_db.sqlite3'),
     }
 }
+DATABASE_ROUTERS = ['config.db_router.DBRouter']
 
 
 # Password validation
