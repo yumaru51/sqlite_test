@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'quality_change_management'
+app_name = 'app'
 # todo urlパラメーターで「admin」「accounts」に送れない。。。
 urlpatterns = [
     path('output/', views.output_test, name='output_test'),

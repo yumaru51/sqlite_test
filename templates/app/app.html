@@ -66,7 +66,30 @@
     </div>
 </main>
 
+{{ message }}
+<br>
+<br>
 
+<h3>ターゲットマスター</h3>
+{% for output in output %}
+    {{ output.target }}<br>
+    {{ output.target_name }}<br>
+    {{ output.lost_flag }}<br>
+{% endfor %}
+
+<h3>ステップマスター</h3>
+{% for output in output2 %}
+    {{ output.step }}<br>
+    {{ output.step_name }}<br>
+    {{ output.hidden_flag }}<br>
+    {{ output.lost_flag }}<br>
+{% endfor %}
+<br>
+<br>
+
+<a href="{% url 'app:output_test' %}">出力</a><br>
+<a href="{% url 'app:delete_test' %}">削除</a><br>
+<a href="{% url 'app:input_test' %}">登録</a><br>
 
 </body>
 </html>

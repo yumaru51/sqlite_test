@@ -13,7 +13,7 @@ class TargetMaster(models.Model):
     #     return u'%s' % (self.target_name)
 
     class Meta:
-        db_table = 'm_target'
+        db_table = 'quality_change_management_m_target'
 
 
 # 入力テーブルマスタ
@@ -37,7 +37,7 @@ class PageMaster(models.Model):
         return u'%s' % (self.page_name)
 
     class Meta:
-        db_table = 'm_page'
+        db_table = 'quality_change_management_m_page'
 
 
 # ボタン機能を管理
@@ -53,7 +53,7 @@ class ActionMaster(models.Model):
         return u'%s' % (self.action_name)
 
     class Meta:
-        db_table = 'm_action'
+        db_table = 'quality_change_management_m_action'
 
 
 # ワークフローのステップを管理
@@ -68,7 +68,7 @@ class StepMaster(models.Model):
     #     return u'%s' % (self.step_name)
 
     class Meta:
-        db_table = 'm_step'
+        db_table = 'quality_change_management_m_step'
 
 
 # ステップ＆ページのエントリー制御を管理
@@ -81,7 +81,7 @@ class StepPageEntryMaster(models.Model):
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 
     class Meta:
-        db_table = 'm_step_page_entry'
+        db_table = 'quality_change_management_m_step_page_entry'
 
 
 # ステップ毎の表示タブを管理
@@ -93,7 +93,7 @@ class StepDisplayPage(models.Model):
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 
     class Meta:
-        db_table = 'm_step_display_page'
+        db_table = 'quality_change_management_m_step_display_page'
 
 
 # ステップ毎の担当部門管理
@@ -106,7 +106,7 @@ class StepChargeDepartment(models.Model):
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 
     class Meta:
-        db_table = 'm_step_charge_department'
+        db_table = 'quality_change_management_m_step_charge_department'
 
 
 # ステップ毎の遷移先を管理
@@ -118,7 +118,7 @@ class StepRelation(models.Model):
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 
     class Meta:
-        db_table = 'm_step_relation'
+        db_table = 'quality_change_management_m_step_relation'
 
 
 # 各ステップのボタン管理
@@ -131,7 +131,7 @@ class StepAction(models.Model):
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 
     class Meta:
-        db_table = 'm_step_action'
+        db_table = 'quality_change_management_m_step_action'
 
 
 # ログトランザクション
@@ -153,7 +153,7 @@ class Log(models.Model):
     #     return u'%s　%s' % (user.last_name, user.first_name)
 
     class Meta:
-        db_table = 't_log'
+        db_table = 'quality_change_management_t_log'
 
 
 # 依頼トランザクション
@@ -184,7 +184,7 @@ class Request(models.Model):
     education_management_system_id = models.CharField('教育管理システムID', max_length=40, blank=True, null=True)
 
     class Meta:
-        db_table = 't_request'
+        db_table = 'quality_change_management_t_request'
 
 
 # 品質トランザクション
@@ -196,7 +196,7 @@ class Quality(models.Model):
     evaluation = models.CharField('変更結果評価', max_length=1000, blank=True, null=True)
 
     class Meta:
-        db_table = 't_quality'
+        db_table = 'quality_change_management_t_quality'
 
 
 # 安全トランザクション
@@ -208,7 +208,7 @@ class Safety(models.Model):
     evaluation = models.CharField('変更結果評価', max_length=1000, blank=True, null=True)
 
     class Meta:
-        db_table = 't_safety'
+        db_table = 'quality_change_management_t_safety'
 
 
 # 各案件の進捗管理
@@ -226,4 +226,4 @@ class Progress(models.Model):
     # last_operation_datetime = models.DateTimeField('前作業日時', blank=True, null=True)  # 前の作業日時はログから取得
 
     class Meta:
-        db_table = 't_progress'
+        db_table = 'quality_change_management_t_progress'
