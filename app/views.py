@@ -1,23 +1,22 @@
 from django.shortcuts import render, HttpResponse
-from .models import TargetMaster2
-from quality_change_management.models import StepMaster
+from quality_change_management.models import TargetMaster, StepMaster
 import openpyxl
 
 
 def output_test(request):
 
     # db_routerがどこを通っているか確認。名前が同じだと後の設定に上書きされる。
-    from django.db import router
-    from fms.models import User
-    print(router.db_for_read(User))
-    print(router.db_for_write(User))
-
-    from django.contrib.auth.models import User
-    print(router.db_for_read(User))
-    print(router.db_for_write(User))
+    # from django.db import router
+    # from fms.models import User
+    # print(router.db_for_read(User))
+    # print(router.db_for_write(User))
+    #
+    # from django.contrib.auth.models import User
+    # print(router.db_for_read(User))
+    # print(router.db_for_write(User))
 
     data = {
-        'output': TargetMaster2.objects.all,
+        'output': TargetMaster.objects.all,
         'output2': StepMaster.objects.all,
         'message': 'データを出力しました'
     }
@@ -25,40 +24,9 @@ def output_test(request):
     return render(request, 'app/app.html', data)
 
 
-def input_test(request):
-
-    TargetMaster2.objects.create(
-        target='request',
-        target_name='依頼データ',
-        lost_flag=0
-    )
-    TargetMaster2.objects.create(
-        target='quality',
-        target_name='品質データ',
-        lost_flag=0
-    )
-    TargetMaster2.objects.create(
-        target='safety',
-        target_name='安全データ',
-        lost_flag=0
-    )
-    StepMaster.objects.create(
-        step=1102,
-        step_name='原課登録編集',
-        lost_flag=0,
-        hidden_flag=0
-    )
-
-    data = {
-        'message': 'データを登録しました'
-    }
-
-    return render(request, 'app/app.html', data)
-
-
 def delete_test(request):
 
-    TargetMaster2.objects.all().delete()
+    TargetMaster.objects.all().delete()
     StepMaster.objects.all().delete()
 
     data = {
@@ -75,34 +43,49 @@ def excel_import(request):
     book = openpyxl.load_workbook(file_path)
 
     # ①シート名を取得
-    # book[sheet] シートを指定して取得
-    # book.worksheets[0] 先頭のシート
     for sheet in book.sheetnames:
-        print('シート名:' + sheet)
+        # print('シート名:' + sheet)  # シート名確認
 
-        # ②ヘッダーを取得
-        # book[sheet][X行] 行指定でカーソル
-        # cell.value 値を取得
-        for column_name in book[sheet][1]:
-            if column_name.value is not None:
-                print('列名:' + column_name.value)
+        # ②列名を取得
+        # book['シート名'] シート名指定して取得, book['シート名'][X行] 行指定して取得
+        # book.worksheets[0] 先頭のシート
+        # for header in book[sheet][1]:
+        #     if header.value is not None:
+        #         print('列名:' + header.value)  # 列名確認
 
         # ③データを取得
-        for row in book[sheet].iter_rows(min_row=2):
-            for cell in row:
-                print(cell.value)
+        if sheet == 'TargetMaster':
+            for column_data in book[sheet].iter_rows(min_row=2):
 
-        # if sheet == 'StepMaster':
-        #     # globals()[変数]
-        #     globals()[sheet].objects.create(
-        #         step=1104,
-        #         step_name='原課部長承認',
-        #         lost_flag=0,
-        #         hidden_flag=0
-        #     )
+                # ④1行ずつINSERT
+                globals()[sheet].objects.create(
+                    target=column_data[0].value,
+                    target_name=column_data[1].value,
+                    lost_flag=column_data[2].value
+                )
+
+        # ③データを取得
+        if sheet == 'StepMaster':
+            for column_data in book[sheet].iter_rows(min_row=2):
+
+                # ④1行ずつINSERT
+                globals()[sheet].objects.create(
+                    step=column_data[0].value,
+                    step_name=column_data[1].value,
+                    lost_flag=column_data[2].value,
+                    hidden_flag=column_data[3].value
+                )
+
+                # 1セルずつ取りたいならforで回す。行データ取得して全列
+                # for row in column_data:
+                # print(row.value)
+
+                # 1セルずつ取りたいならforで回す。列数取得してindex指定
+                # for index in range(len(column_data)):
+                #     print(column_data[index].value)
 
     data = {
-        'output': TargetMaster2.objects.all,
+        'output': TargetMaster.objects.all,
         'output2': StepMaster.objects.all,
         'message': 'importしました'
     }
