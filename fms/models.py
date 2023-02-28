@@ -9,8 +9,8 @@ class User(models.Model):
     display_order = models.IntegerField('表示順', blank=True, null=True)
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 
-    def __str__(self):
-        return u'%s　%s' % (self.last_name, self.first_name)
+    # def __str__(self):
+    #     return u'%s　%s' % (self.last_name, self.first_name)
 
 
 # 部署マスタ

@@ -226,12 +226,15 @@ def excel_import2(request):
         if sheet == 'DepartmentMaster':
             for column_data in book[sheet].iter_rows(min_row=2):
 
+                aria_manager = ''
+                if column_data[3].value is not None:
+                    aria_manager = User.objects.get(username=column_data[3].value)
                 # ④1行ずつINSERT
                 globals()[sheet].objects.create(
                     department_cd=column_data[0].value,
                     department_name=column_data[1].value,
                     division_cd=column_data[2].value,
-                    area_manager=column_data[3].value,
+                    area_manager=aria_manager,
                     jurisdiction_area=column_data[4].value,
                     display_order=column_data[5].value,
                     lost_flag=column_data[6].value
@@ -255,16 +258,16 @@ def excel_import2(request):
 
                 # ④1行ずつINSERT
                 globals()[sheet].objects.create(
-                    username=column_data[0].value,
-                    department=column_data[1].value,
-                    division=column_data[2].value,
-                    authority=column_data[3].value,
-                    confirm_username=column_data[4].value,
-                    permit_username=column_data[5].value,
-                    department_charge_flag=column_data[6].value,
-                    display_order=column_data[7].value,
-                    user_order=column_data[8].value,
-                    lost_flag=column_data[9].value
+                    username=column_data[1].value,
+                    department=column_data[2].value,
+                    division=column_data[3].value,
+                    authority=column_data[4].value,
+                    confirm_username=column_data[5].value,
+                    permit_username=column_data[6].value,
+                    department_charge_flag=column_data[7].value,
+                    display_order=column_data[8].value,
+                    user_order=column_data[9].value,
+                    lost_flag=column_data[10].value
                 )
 
     data = {
