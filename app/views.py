@@ -226,9 +226,10 @@ def excel_import2(request):
         if sheet == 'DepartmentMaster':
             for column_data in book[sheet].iter_rows(min_row=2):
 
-                aria_manager = ''
+                aria_manager = None
                 if column_data[3].value is not None:
                     aria_manager = User.objects.get(username=column_data[3].value)
+
                 # ④1行ずつINSERT
                 globals()[sheet].objects.create(
                     department_cd=column_data[0].value,
