@@ -12,7 +12,7 @@ window.onload = function() {
 {% endblock %}
 
 {% block content %}
-<h1>品質・安全変更管理ツール</h1>
+<h1 class="mt-3">品質・安全変更管理ツール</h1>
 <button class="btn btn-primary w-10 btn-lg" type="button" onclick="location.href='{% url 'quality_change_management:detail' 1102 'request' 0 %}'">変更管理新規登録</button>
 　　　<button class="btn btn-primary w-10 btn-lg" type="button" onclick="location.href='{% url 'quality_change_management:report' 0 %}'">レポートの出力</button><br><br>
 
