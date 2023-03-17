@@ -17,7 +17,7 @@ window.onload = function() {
 {% block content %}
 <!--ステップ表示-->
 <div class="row">
-    <div class="col-8 mt-3"><h1>{{ step_name }}</h1></div>
+    <div class="col-8"><h1>{{ step_name }}</h1></div>
     <div class="col-4"><button class="btn btn-primary w-10 btn-lg" type="button" onclick="location.href='{% url 'quality_change_management:top_page' %}';">TOPに戻る</button></div>
 </div>
 
