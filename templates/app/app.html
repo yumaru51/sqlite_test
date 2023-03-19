@@ -9,9 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-    <!-- Custom styles for this template -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar-top-fixed.css' %}">
-
     <!--CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/quality_change_management.css' %}">
 
@@ -69,8 +66,20 @@
 <h3>{{ message }}</h3>
 <a href="{% url 'app:output_test' %}">出力</a><br>
 <a href="{% url 'app:delete_test' %}">削除</a><br>
-<a href="{% url 'app:excel_import' %}">import</a><br>
-<a href="{% url 'app:excel_import2' %}">import2</a><br>
+<a href="{% url 'app:excel_import' %}">変更管理ツールimport</a><br>
+<a href="{% url 'app:excel_import2' %}">設備管理システムimport</a><br>
+<form action="{% url 'app:excel_export' %}" method="post">
+    {% csrf_token %}
+    <!-- input fields -->
+    <label>app_name:</label>
+    <select class="form-select" name="app_name">
+    {% for app in app_list %}
+        <option value="{{ app.name }}">{{ app.verbose_name }}</option>
+    {% endfor %}
+    </select>
+    <input class='btn btn-primary' type="submit" value="model定義EXCELファイルexport">
+</form>
+
 <br>
 <br>
 

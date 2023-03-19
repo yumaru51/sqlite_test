@@ -10,7 +10,7 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls'), name='accounts'),
     # path('admin/', admin.site.urls, name='admin'),
     path('detail/<int:present_step>/<str:target>/<int:request_id>/', main.detail, name='detail'),
-    path('report/<int:export>', main.report, name='report'),
+    path('report/<int:export>/', main.report, name='report'),
     # entry処理
     path('action/<function_name>/', action.action, name='action'),
     # ajax処理
