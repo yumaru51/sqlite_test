@@ -359,7 +359,8 @@ def export_model_to_excel(model: Model, output_file_path: str):
 def excel_export(request):
     today = str(date.today())
     app_name = request.POST['app_name']
-    output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + app_name
+    # output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + app_name
+    output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + app_name
 
     # フォルダを作成する
     Path(output_folder_path).mkdir(parents=True, exist_ok=True)
