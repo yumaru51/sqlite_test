@@ -1,18 +1,12 @@
 
 ①
-会社では同じGITのプロジェクトもデバックできる！
-manageとかmain以外の箇所でも！
+デバック、MACでのみできないので、パスか？
 
 ②
-更に変更管理ツールjavascriptエラーもでていない！
-javascript反映されないのはキャッシュの問題みたい。
-キャッシュ消すの嫌ならブラウザ変える。
-
-③
 setting作って、SQLSERVERからエクスポート！fmsモデル追加が必要！
 
-④
-↓がわかってない。
+③
+↓まとめる。
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,5 +26,12 @@ configフォルダにDBが作られてしまった。。。
 この定義は、settings.pyファイルの親ディレクトリのパスを取得して、それをBASE_DIRに設定しています。つまり、デフォルトでは、BASE_DIRはsettings.pyファイルが存在するディレクトリの1つ上のディレクトリになります。
 
 settingをフォルダに格納するので、更に一個追加で囲む。
+
+
+④
+IMPORT
+column_names = ['username', 'first_name', 'last_name', 'display_order', 'lost_flag']
+
+globals()[sheet].objects.create(**{column_names[i]: column_data[i].value for i in range(len(column_names))})
 
 
