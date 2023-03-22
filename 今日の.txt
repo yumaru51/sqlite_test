@@ -1,0 +1,36 @@
+
+①
+会社では同じGITのプロジェクトもデバックできる！
+manageとかmain以外の箇所でも！
+
+②
+更に変更管理ツールjavascriptエラーもでていない！
+javascript反映されないのはキャッシュの問題みたい。
+キャッシュ消すの嫌ならブラウザ変える。
+
+③
+setting作って、SQLSERVERからエクスポート！fmsモデル追加が必要！
+
+④
+↓がわかってない。
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+configフォルダにDBが作られてしまった。。。
+一個上の階層にしたい。（たぶんformがあったので変更管理ツールだけ。）
+
+
+1.os.path.abspath(__file__)は、現在実行中のPythonファイルの絶対パスを取得します。
+（settign.pyに定義されているので、現在実行中(=カレントディレクトリ)はsetting.pyがあるパス）
+
+2.os.path.dirname(os.path.abspath(__file__))は、Pythonファイルの絶対パスの親ディレクトリの絶対パスを取得します。
+
+3.os.path.dirname(os.path.dirname(os.path.abspath(__file__)))は、親ディレクトリの絶対パスの親ディレクトリの絶対パスを取得します。つまり、Pythonプロジェクトのルートディレクトリの絶対パスが取得されます。
+
+このようにして、BASE_DIR変数にはPythonプロジェクトのルートディレクトリの絶対パスが格納されます。この値を使用することで、プロジェクト内の他のファイルやディレクトリに簡単にアクセスできます。
+
+この定義は、settings.pyファイルの親ディレクトリのパスを取得して、それをBASE_DIRに設定しています。つまり、デフォルトでは、BASE_DIRはsettings.pyファイルが存在するディレクトリの1つ上のディレクトリになります。
+
+settingをフォルダに格納するので、更に一個追加で囲む。
+
+
