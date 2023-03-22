@@ -1,3 +1,4 @@
 venv/
+.idea/vcs.xml
 .idea/misc.xml
 .idea/sqlite_test.iml
