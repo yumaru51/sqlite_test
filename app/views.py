@@ -342,9 +342,15 @@ def export_model_to_excel(model: Model, output_file_path: str):
                     foreignkey_value = str(getattr(obj, field.name))
                 except ValueError:
                     continue
-
                 # write the foreign key value to the worksheet
                 worksheet.write(row, col, foreignkey_value)
+            elif field.get_internal_type() == 'DateTimeField':
+                try:
+                    datetime_value = getattr(obj, field.name).replace(tzinfo=None)
+                except ValueError:
+                    continue
+                # write the datetime key value to the worksheet
+                worksheet.write(row, col, datetime_value)
             else:
                 # write the field value to the worksheet
                 worksheet.write(row, col, getattr(obj, field.name))

@@ -78,17 +78,41 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'isk_tools_base',
+        'USER': 'isk_tools_user',
+        'PASSWORD': 'iskisk6117',
+        'HOST': 'y0033out',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 13 for SQL Server',
+        },
+        'ATOMIC_REQUESTS': True
     },
     'fms': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'fms_db.sqlite3'),
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'fms',
+        'USER': 'isk_tools_user',
+        'PASSWORD': 'iskisk6117',
+        'HOST': 'y0033out',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 13 for SQL Server',
+        },
+        'ATOMIC_REQUESTS': True
     },
     'quality_change_management': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'quality_change_management_db.sqlite3'),
-    }
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'quality_change_management',
+        'USER': 'isk_tools_user',
+        'PASSWORD': 'iskisk6117',
+        'HOST': 'y0033out',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 13 for SQL Server',
+        },
+        'ATOMIC_REQUESTS': True
+    },
 }
 DATABASE_ROUTERS = ['config.db_router.DBRouter']
 
