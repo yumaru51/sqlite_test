@@ -383,7 +383,7 @@ def excel_export(request):
     for model in model_list:
         print('App名：' + str(app) + ', Model名：' + model.__name__)
         model_data = app.get_model(model.__name__)  # "app_name.ModelName"
-        output_file_path = output_folder_path + '/' + app_name + '_' + model.__name__ + ".xlsx"
+        output_file_path = output_folder_path + '/' + app_name + '_' + model.__name__ + ".xls"
         export_model_to_excel(model_data, output_file_path)
 
     data = {
