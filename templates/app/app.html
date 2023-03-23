@@ -67,7 +67,16 @@
 <a href="{% url 'app:output_test' %}">出力</a><br>
 <a href="{% url 'app:delete_test' %}">削除</a><br>
 <a href="{% url 'app:excel_import' %}">変更管理ツールimport</a><br>
-<a href="{% url 'app:excel_import2' %}">設備管理システムimport</a><br>
+<!--<a href="{% url 'app:excel_import2' %}">設備管理システムimport</a><br>-->
+<br>
+<form action="{% url 'app:excel_import2' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- input fields -->
+    <label>importフォルダ</label>
+    <input class="form-control" name="import_file" type="file" multiple>
+    <input class='btn btn-primary' type="submit" value="model定義EXCELファイルimport">
+</form>
+<br>
 <form action="{% url 'app:excel_export' %}" method="post">
     {% csrf_token %}
     <!-- input fields -->

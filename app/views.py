@@ -9,6 +9,9 @@ from pathlib import Path
 from datetime import date
 import openpyxl
 import xlwt
+import xlrd
+import os
+import pandas as pd
 
 
 def get_excluded_app_list():
@@ -220,76 +223,59 @@ def excel_import(request):
 
 
 def excel_import2(request):
+    column_names = []
+
+    # ファイルが1件もない
+    if request.FILES.__len__() == 0:
+        msg = "ファイルが選択されていません！"
 
     # import用EXCELファイルの読み込み
-    file_path = 'C:\\Users\\y-kawauchi\\python_tool_development\\sqlite_test\\app\\データ移行2.xlsx'
-    book = openpyxl.load_workbook(file_path)
+    else:
+        for file in request.FILES.getlist('import_file'):
+            # ファイル名をファイル名部分と拡張子部分で分ける
+            file_name, ext = os.path.splitext(file.name)
+            # 「.xls」形式でExcelファイルを開く
+            df = pd.read_excel(file, engine='xlrd')
+            # 「.xlsx」形式でExcelファイルを保存する
+            df.to_excel(file_name + '.xlsx', index=False)
 
-    # ①シート名を取得
-    for sheet in book.sheetnames:
-        # print('シート名:' + sheet)  # シート名確認
+            # Excelファイル読込
+            workbook = openpyxl.load_workbook(file_name + '.xlsx')
+            worksheet = workbook.active
 
-        # ③データを取得
-        if sheet == 'User':
-            for column_data in book[sheet].iter_rows(min_row=2):
+            # 項目の取得
+            for cell in worksheet[1]:
+                column_names.append(cell.value)
+            print(file_name + 'を処理しています')
+            print(column_names)
 
-                # ④1行ずつINSERT
-                globals()[sheet].objects.create(
-                    username=column_data[0].value,
-                    first_name=column_data[1].value,
-                    last_name=column_data[2].value,
-                    display_order=column_data[3].value,
-                    lost_flag=column_data[4].value
-                )
+            # IMPORT処理
+            for column_data in worksheet.iter_rows(min_row=2):
+                globals()[file_name].objects.create(
+                    **{column_names[i]: column_data[i].value for i in range(len(column_names))})
 
-        # ③データを取得
-        if sheet == 'DepartmentMaster':
-            for column_data in book[sheet].iter_rows(min_row=2):
+            # リセット
+            column_names = []
+    print('import完了')
 
-                aria_manager = None
-                if column_data[3].value is not None:
-                    aria_manager = User.objects.get(username=column_data[3].value)
-
-                # ④1行ずつINSERT
-                globals()[sheet].objects.create(
-                    department_cd=column_data[0].value,
-                    department_name=column_data[1].value,
-                    division_cd=column_data[2].value,
-                    area_manager=aria_manager,
-                    jurisdiction_area=column_data[4].value,
-                    display_order=column_data[5].value,
-                    lost_flag=column_data[6].value
-                )
-
-        # ③データを取得
-        if sheet == 'DivisionMaster':
-            for column_data in book[sheet].iter_rows(min_row=2):
-
-                # ④1行ずつINSERT
-                globals()[sheet].objects.create(
-                    division_cd=column_data[0].value,
-                    division_name=column_data[1].value,
-                    display_order=column_data[2].value,
-                    lost_flag=column_data[3].value
-                )
-
-        # ③データを取得
-        if sheet == 'UserAttribute':
-            for column_data in book[sheet].iter_rows(min_row=2):
-
-                # ④1行ずつINSERT
-                globals()[sheet].objects.create(
-                    username=column_data[1].value,
-                    department=column_data[2].value,
-                    division=column_data[3].value,
-                    authority=column_data[4].value,
-                    confirm_username=column_data[5].value,
-                    permit_username=column_data[6].value,
-                    department_charge_flag=column_data[7].value,
-                    display_order=column_data[8].value,
-                    user_order=column_data[9].value,
-                    lost_flag=column_data[10].value
-                )
+    # # ③データを取得
+    # if sheet == 'DepartmentMaster':
+    #     for column_data in book[sheet].iter_rows(min_row=2):
+    #
+    #         aria_manager = None
+    #         if column_data[3].value is not None:
+    #             aria_manager = User.objects.get(username=column_data[3].value)
+    #
+    #         # ④1行ずつINSERT
+    #         globals()[sheet].objects.create(
+    #             department_cd=column_data[0].value,
+    #             department_name=column_data[1].value,
+    #             division_cd=column_data[2].value,
+    #             area_manager=aria_manager,
+    #             jurisdiction_area=column_data[4].value,
+    #             display_order=column_data[5].value,
+    #             lost_flag=column_data[6].value
+    #         )
 
     data = {
         'app_list': get_excluded_app_list(),
@@ -299,7 +285,7 @@ def excel_import2(request):
     return render(request, 'app/app.html', data)
 
 
-# 外部参照キー未対応
+# 外部参照キー未対応(削除予定)
 def export_model_to_excel2(model: Model, output_file_path: str):
     # Excelファイルを作成
     workbook = openpyxl.Workbook()
@@ -383,7 +369,7 @@ def excel_export(request):
     for model in model_list:
         print('App名：' + str(app) + ', Model名：' + model.__name__)
         model_data = app.get_model(model.__name__)  # "app_name.ModelName"
-        output_file_path = output_folder_path + '/' + app_name + '_' + model.__name__ + ".xls"
+        output_file_path = output_folder_path + '/' + model.__name__ + ".xls"
         export_model_to_excel(model_data, output_file_path)
 
     data = {
