@@ -30,15 +30,21 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 
 ④
 IMPORT
-画面上で複数ファイルを選択。
-viewで複数ファイルを受け取り、forで一つずつ処理。
-ファイル名からMolde名を取得。
-ファイルの1行目ヘッダーから項目を取得。
-column_namesのリストに格納。
-2行目以降のデータを取得して、データIMPORTする。
 
-column_names = ['username', 'first_name', 'last_name', 'display_order', 'lost_flag']
-globals()[sheet].objects.create(**{column_names[i]: column_data[i].value for i in range(len(column_names))})
+shellpath
+source /Users/y-kawauchi/python_tool_development/sqlite_test/venv/bin/activate
 
-外部参照の対応について、IMPORTで対応ではなくEXPOERTで対応すべき！
 
+画面上でapp_nameを選択。「apps.get_app_config(app_name)」を使って、ファイルを指定。
+model情報から項目を取得して、リストに格納。
+2行目からIMPORT。ifで項目の型が外部参照キーの場合だけ、特別処理。
+インスタンスをIMPORTする。
+
+関数名を変えたい
+export_model,export_model_to_excel
+import_model,import_model_to_excel
+
+
+⑤外部参照キー関連名称
+　「参照先テーブル (referenced table)」
+　「参照元テーブル (referencing table)」

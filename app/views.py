@@ -222,6 +222,10 @@ def excel_import(request):
     return render(request, 'app/app.html', data)
 
 
+def import_model_to_excel(model: Model, output_file_path: str):
+    return
+
+
 def excel_import2(request):
     column_names = []
 
@@ -257,25 +261,6 @@ def excel_import2(request):
             # リセット
             column_names = []
     print('import完了')
-
-    # # ③データを取得
-    # if sheet == 'DepartmentMaster':
-    #     for column_data in book[sheet].iter_rows(min_row=2):
-    #
-    #         aria_manager = None
-    #         if column_data[3].value is not None:
-    #             aria_manager = User.objects.get(username=column_data[3].value)
-    #
-    #         # ④1行ずつINSERT
-    #         globals()[sheet].objects.create(
-    #             department_cd=column_data[0].value,
-    #             department_name=column_data[1].value,
-    #             division_cd=column_data[2].value,
-    #             area_manager=aria_manager,
-    #             jurisdiction_area=column_data[4].value,
-    #             display_order=column_data[5].value,
-    #             lost_flag=column_data[6].value
-    #         )
 
     data = {
         'app_list': get_excluded_app_list(),
@@ -325,7 +310,19 @@ def export_model_to_excel(model: Model, output_file_path: str):
             if field.get_internal_type() == 'ForeignKey':
                 # check if foreign key value can be converted to int
                 try:
-                    foreignkey_value = str(getattr(obj, field.name))
+                    # 参照先テーブルの外部参照キー項目
+                    foreignkey_field = getattr(obj, field.name)
+
+                    # 参照元テーブルの主キー取得
+                    if foreignkey_field is not None:
+                        # ①参照元テーブルの主キー値取得
+                        foreignkey_value = foreignkey_field.pk
+                        # ②参照元テーブルの主キーを取得してから値を取得
+                        # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
+                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
+                    else:
+                        foreignkey_value = ''
+
                 except ValueError:
                     continue
                 # write the foreign key value to the worksheet
