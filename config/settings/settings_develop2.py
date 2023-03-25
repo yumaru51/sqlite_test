@@ -79,15 +79,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR + '/databases', 'db.sqlite3'),
     },
     'fms': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'fms_db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR + '/databases', 'fms_db.sqlite3'),
     },
     'quality_change_management': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'quality_change_management_db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR + '/databases', 'quality_change_management_db.sqlite3'),
     }
 }
 DATABASE_ROUTERS = ['config.db_router.DBRouter']

@@ -1,10 +1,4 @@
 
-①
-デバック、MACでのみできないので、パスか？
-
-②
-setting作って、SQLSERVERからエクスポート！fmsモデル追加が必要！
-
 ③
 ↓まとめる。
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,11 +25,10 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 ④
 IMPORT
 
-shellpath
-source /Users/y-kawauchi/python_tool_development/sqlite_test/venv/bin/activate
-
-
-画面上でapp_nameを選択。「apps.get_app_config(app_name)」を使って、ファイルを指定。
+画面上でapp_nameを選択。
+ファイルをアップロードする必要ある？
+path指定してファイル取得の方が良さそう。
+「apps.get_app_config(app_name)」を使って、ファイルを指定。
 model情報から項目を取得して、リストに格納。
 2行目からIMPORT。ifで項目の型が外部参照キーの場合だけ、特別処理。
 インスタンスをIMPORTする。
