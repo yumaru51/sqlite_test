@@ -1,5 +1,5 @@
 
-③
+①
 ↓まとめる。
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,22 +22,13 @@ configフォルダにDBが作られてしまった。。。
 settingをフォルダに格納するので、更に一個追加で囲む。
 
 
-④
-IMPORT
-
-画面上でapp_nameを選択。
-ファイルをアップロードする必要ある？
-path指定してファイル取得の方が良さそう。
-「apps.get_app_config(app_name)」を使って、ファイルを指定。
-model情報から項目を取得して、リストに格納。
-2行目からIMPORT。ifで項目の型が外部参照キーの場合だけ、特別処理。
-インスタンスをIMPORTする。
-
-関数名を変えたい
-export_model,export_model_to_excel
-import_model,import_model_to_excel
-
-
-⑤外部参照キー関連名称
+②外部参照キー関連名称
 　「参照先テーブル (referenced table)」
 　「参照元テーブル (referencing table)」
+
+
+③
+
+
+
+

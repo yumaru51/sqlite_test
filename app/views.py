@@ -8,6 +8,7 @@ from fms.models import User, DepartmentMaster, DivisionMaster, UserAttribute
 from pathlib import Path
 from datetime import date
 import openpyxl
+from openpyxl.utils import datetime
 import xlwt
 import xlrd
 import os
@@ -77,7 +78,9 @@ def delete_test(request):
 def excel_import(request):
 
     # import用EXCELファイルの読み込み
-    file_path = 'C:\\Users\\y-kawauchi\\python_tool_development\\sqlite_test\\app\\データ移行.xlsx'
+    # file_path = 'C:\\Users\\y-kawauchi\\python_tool_development\\sqlite_test\\app\\データ移行.xlsx'
+    file_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/app/データ移行.xlsx'
+
     book = openpyxl.load_workbook(file_path)
 
     # ①シート名を取得
@@ -251,7 +254,6 @@ def import_excel_to_model(model: Model, file_name, output_folder_path):
                         ref_instance = ref_model.objects.get(pk=ref_pk)
                         kwargs[column_names[i]] = ref_instance
                     else:
-                        print('None通ってます')
                         kwargs[column_names[i]] = None
                 except ValueError:
                     continue
@@ -261,6 +263,7 @@ def import_excel_to_model(model: Model, file_name, output_folder_path):
         # 1行ずつIMPORT処理
         # globals()[file_name].objects.create(**{column_names[i]: column_data[i].value})  # 辞書に変換する構文
         # kwargs = dict(zip(column_names, column_datas))
+        print(kwargs)
         globals()[file_name].objects.create(**kwargs)
 
     return
@@ -342,7 +345,8 @@ def export_model_to_excel(model: Model, output_file_path: str):
                 worksheet.write(row, col, foreignkey_value)
             elif field.get_internal_type() == 'DateTimeField':
                 try:
-                    datetime_value = getattr(obj, field.name).replace(tzinfo=None)
+                    # datetime_value = getattr(obj, field.name).replace(tzinfo=None)
+                    datetime_value = datetime.datetime.strftime(getattr(obj, field.name).replace(tzinfo=None), '%Y-%m-%d')
                 except ValueError:
                     continue
                 # write the datetime key value to the worksheet
@@ -361,8 +365,8 @@ def export_model_to_excel(model: Model, output_file_path: str):
 def export_data(request):
     today = str(date.today())
     app_name = request.POST['app_name']
-    # output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name
-    output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name
+    output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name
+    # output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name
 
     # フォルダを作成する
     Path(output_folder_path).mkdir(parents=True, exist_ok=True)
@@ -386,6 +390,40 @@ def export_data(request):
         'app_list': get_excluded_app_list(),
         'app_name': app_name,
         'message': app_name + 'をexportしました'
+    }
+
+    return render(request, 'app/app.html', data)
+
+
+def test_function(request):
+
+    kwargs = {
+        'id': 1,
+        'division': 'TIODIV',
+        'department': 'S',
+        'user': 'end',
+        'change_target': '[method, facility, ]',
+        'others': None,
+        'title': '1B2BC工場\u3000H-N廃酸運用方法の変更',
+        'outline': '①\t1次洗浄濾液をタイマー管理でH・N廃酸に振り分けていったが、H-N廃酸の切替をなくし全量N廃酸とする。\n②\tW-10タンクとW-04タンクを底配管で連通させて、加水分解タンクの希釈水タンクの容量を20→40m3としオーバーフローとしてN廃酸へロスしていたものを削減する。',
+        'level': None,
+        'treatment': None,
+        'safety_aspect': '0',
+        'quality_aspect': '0',
+        'delivery_date': 42552,
+        # 'delivery_date_start': None,
+        'delivery_date_end': None,
+        'level2': '継続',
+        'others2': None,
+        'completion_date': None,
+        'application_date': None,
+        'education_management_system_id': None
+    }
+    Request.objects.create(**kwargs)
+
+    data = {
+        'app_list': get_excluded_app_list(),
+        'message': 'テスト完了'
     }
 
     return render(request, 'app/app.html', data)
