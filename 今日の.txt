@@ -22,12 +22,26 @@ configフォルダにDBが作られてしまった。。。
 settingをフォルダに格納するので、更に一個追加で囲む。
 
 
-②外部参照キー関連名称
+②
+外部参照キー関連名称
 　「参照先テーブル (referenced table)」
 　「参照元テーブル (referencing table)」
 
 
 ③
+品質・安全変更管理ツール　フォルダまとめる
+事前
+・templatesのフォルダ
+・appフォルダ
+・js
+・css
+・ライブラリ確認
+・マイグレーション
+当日
+・configのurls.py
+・top_page.html
+・settings.py
+・
 
 
 
