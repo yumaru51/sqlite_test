@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import date
 import openpyxl
 from openpyxl.utils import datetime
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Alignment, NamedStyle, numbers
 from openpyxl.utils import get_column_letter
 import xlwt
@@ -81,13 +81,15 @@ def delete_test(request):
     return render(request, 'app/app.html', data)
 
 
-def import_excel_to_model(model: Model, file_name, output_folder_path):
+def import_excel_to_model(model: Model, file_name, file):
     print(file_name + 'を処理しています')
     fields = model._meta.fields
     kwargs = {}
 
-    # Excelファイル読込
-    workbook = openpyxl.load_workbook(output_folder_path + '/' + file_name + '.xlsx')
+    # ファイルに保存済みのExcelファイル読込
+    # workbook = openpyxl.load_workbook(output_folder_path + '/' + file_name + '.xlsx')
+    # メモリ上に一時ファイルを保存し、Openpyxlで読み込む
+    workbook = load_workbook(file, read_only=True)
     worksheet = workbook.active
 
     # 項目の取得
@@ -127,30 +129,37 @@ def import_excel_to_model(model: Model, file_name, output_folder_path):
 def import_data(request):
     today = str(date.today())
     app_name = request.POST['app_name']
-    if host_name == 'I7781DN7':
-        output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name + '_import'
-    else:
-        output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name + '_import'
 
-    # フォルダを作成する
-    Path(output_folder_path).mkdir(parents=True, exist_ok=True)
+    # if host_name == 'I7781DN7':
+    #     output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name + '_import'
+    # else:
+    #     output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name + '_import'
+    #
+    # # フォルダを作成する
+    # Path(output_folder_path).mkdir(parents=True, exist_ok=True)
 
     # ファイルが1件もない
     if request.FILES.__len__() == 0:
-        breakpoint
+        data = {
+            'app_list': get_excluded_app_list(),
+            'message': 'フォルダを選択していません。'
+        }
+        return render(request, 'app/app.html', data)
 
     # import用EXCELファイルの読み込み
     else:
         for file in request.FILES.getlist('import_file'):
             # ファイル名をファイル名部分と拡張子部分で分ける
             file_name, ext = os.path.splitext(file.name)
+
             # 「.xls」形式でExcelファイルを開く
-            df = pd.read_excel(file, engine='xlrd')
+            # df = pd.read_excel(file, engine='openpyxl')
             # 「.xlsx」形式でExcelファイルを保存する
-            df.to_excel(output_folder_path + '/' + file_name + '.xlsx', index=False)
+            # df.to_excel(output_folder_path + '/' + file_name + '.xlsx', index=False)
+
             # ModelClass指定でModel情報取得
             model_data = apps.get_model(app_name, file_name)  # "app_name.ModelName"
-            import_excel_to_model(model_data, file_name, output_folder_path)
+            import_excel_to_model(model_data, file_name, file)
 
     print('import完了')
 
@@ -280,6 +289,133 @@ def export_data(request):
     }
 
     return render(request, 'app/app.html', data)
+
+
+def test_function(request):
+
+    kwargs = {
+        'id': 1,
+        'division': 'TIODIV',
+        'department': 'S',
+        'user': 'end',
+        'change_target': '[method, facility, ]',
+        'others': None,
+        'title': '1B2BC工場\u3000H-N廃酸運用方法の変更',
+        'outline': '①\t1次洗浄濾液をタイマー管理でH・N廃酸に振り分けていったが、H-N廃酸の切替をなくし全量N廃酸とする。\n②\tW-10タンクとW-04タンクを底配管で連通させて、加水分解タンクの希釈水タンクの容量を20→40m3としオーバーフローとしてN廃酸へロスしていたものを削減する。',
+        'level': None,
+        'treatment': None,
+        'safety_aspect': '0',
+        'quality_aspect': '0',
+        'delivery_date': 42552,
+        # 'delivery_date_start': None,
+        'delivery_date_end': None,
+        'level2': '継続',
+        'others2': None,
+        'completion_date': None,
+        'application_date': None,
+        'education_management_system_id': None
+    }
+    Request.objects.create(**kwargs)
+
+    data = {
+        'app_list': get_excluded_app_list(),
+        'message': 'テスト完了'
+    }
+
+    return render(request, 'app/app.html', data)
+
+
+# 外部参照キー対応
+def export_model_to_excel_20230327(model: Model, output_file_path: str):
+    # get all fields
+    fields = model._meta.fields
+
+    # create workbook and worksheet
+    workbook = xlwt.Workbook(encoding='utf-8')
+    # worksheet = workbook.add_sheet(model.__name__)
+    worksheet = workbook.add_sheet('Sheet1')
+
+    # write headers
+    for i, field in enumerate(fields):
+        worksheet.write(0, i, field.name)
+
+    # write data
+    row = 1
+    for obj in model.objects.all():
+        col = 0
+        for field in fields:
+            if field.get_internal_type() == 'ForeignKey':
+                # check if foreign key value can be converted to
+                try:
+                    # 参照先テーブルの外部参照キー項目
+                    foreignkey_field = getattr(obj, field.name)
+
+                    # 参照元テーブルの主キー取得
+                    if foreignkey_field is not None:
+                        # ①参照元テーブルの主キー値取得
+                        foreignkey_value = foreignkey_field.pk
+                        # ②参照元テーブルの主キーを取得してから値を取得
+                        # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
+                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
+                    else:
+                        foreignkey_value = ''
+
+                except ValueError:
+                    continue
+                # write the foreign key value to the worksheet
+                worksheet.write(row, col, foreignkey_value)
+            elif field.get_internal_type() == 'DateField':
+                try:
+                    date_value = getattr(obj, field.name)
+                except ValueError:
+                    continue
+                # カスタム書式を設定する
+                style = xlwt.XFStyle()
+                style.num_format_str = 'yyyy/mm/dd'
+                # セルに値を書き込む
+                # worksheet.write(row, col, date_value, style=style)
+                worksheet.write(row, col, date_value)
+                worksheet.row(row).set_style(style)
+            elif field.get_internal_type() == 'DateTimeField':
+                try:
+                    datetime_field = getattr(obj, field.name)
+                    if datetime_field is not None:
+                        datetime_value = datetime_field.replace(tzinfo=None)
+                    else:
+                        datetime_value = ''
+                except ValueError:
+                    continue
+                # カスタム書式を設定する
+                style = xlwt.XFStyle()
+                style.num_format_str = 'yyyy/m/d hh:mm:ss'
+                # セルに値を書き込む
+                # worksheet.write(row, col, datetime_value, style=style)
+                worksheet.write(row, col, datetime_value)
+                worksheet.row(row).set_style(style)
+            else:
+                # write the field value to the worksheet
+                worksheet.write(row, col, getattr(obj, field.name))
+            col += 1
+        row += 1
+
+    # save workbook to output file path
+    workbook.save(output_file_path)
+
+
+# 外部参照キー未対応(削除予定)
+def export_model_to_excel_20230326(model: Model, output_file_path: str):
+    # Excelファイルを作成
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    # ヘッダ行を追加
+    headers = [field.name for field in model._meta.fields]
+    worksheet.append(headers)
+    # データ行を追加
+    for obj in model.objects.all():
+        row = [getattr(obj, field) for field in headers]
+        worksheet.append(row)
+    # Excelファイルを保存
+    workbook.save(output_file_path)
 
 
 def excel_import(request):
@@ -432,131 +568,3 @@ def excel_import(request):
 
     # return HttpResponse("<script>alert('importしました');window.history.back(-1);</script>")
     return render(request, 'app/app.html', data)
-
-
-def test_function(request):
-
-    kwargs = {
-        'id': 1,
-        'division': 'TIODIV',
-        'department': 'S',
-        'user': 'end',
-        'change_target': '[method, facility, ]',
-        'others': None,
-        'title': '1B2BC工場\u3000H-N廃酸運用方法の変更',
-        'outline': '①\t1次洗浄濾液をタイマー管理でH・N廃酸に振り分けていったが、H-N廃酸の切替をなくし全量N廃酸とする。\n②\tW-10タンクとW-04タンクを底配管で連通させて、加水分解タンクの希釈水タンクの容量を20→40m3としオーバーフローとしてN廃酸へロスしていたものを削減する。',
-        'level': None,
-        'treatment': None,
-        'safety_aspect': '0',
-        'quality_aspect': '0',
-        'delivery_date': 42552,
-        # 'delivery_date_start': None,
-        'delivery_date_end': None,
-        'level2': '継続',
-        'others2': None,
-        'completion_date': None,
-        'application_date': None,
-        'education_management_system_id': None
-    }
-    Request.objects.create(**kwargs)
-
-    data = {
-        'app_list': get_excluded_app_list(),
-        'message': 'テスト完了'
-    }
-
-    return render(request, 'app/app.html', data)
-
-
-# 外部参照キー対応
-def export_model_to_excel_20230327(model: Model, output_file_path: str):
-    # get all fields
-    fields = model._meta.fields
-
-    # create workbook and worksheet
-    workbook = xlwt.Workbook(encoding='utf-8')
-    # worksheet = workbook.add_sheet(model.__name__)
-    worksheet = workbook.add_sheet('Sheet1')
-
-    # write headers
-    for i, field in enumerate(fields):
-        worksheet.write(0, i, field.name)
-
-    # write data
-    row = 1
-    for obj in model.objects.all():
-        col = 0
-        for field in fields:
-            if field.get_internal_type() == 'ForeignKey':
-                # check if foreign key value can be converted to
-                try:
-                    # 参照先テーブルの外部参照キー項目
-                    foreignkey_field = getattr(obj, field.name)
-
-                    # 参照元テーブルの主キー取得
-                    if foreignkey_field is not None:
-                        # ①参照元テーブルの主キー値取得
-                        foreignkey_value = foreignkey_field.pk
-                        # ②参照元テーブルの主キーを取得してから値を取得
-                        # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
-                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
-                    else:
-                        foreignkey_value = ''
-
-                except ValueError:
-                    continue
-                # write the foreign key value to the worksheet
-                worksheet.write(row, col, foreignkey_value)
-            elif field.get_internal_type() == 'DateField':
-                try:
-                    date_value = getattr(obj, field.name)
-                except ValueError:
-                    continue
-                # カスタム書式を設定する
-                style = xlwt.XFStyle()
-                style.num_format_str = 'yyyy/mm/dd'
-                # セルに値を書き込む
-                # worksheet.write(row, col, date_value, style=style)
-                worksheet.write(row, col, date_value)
-                worksheet.row(row).set_style(style)
-            elif field.get_internal_type() == 'DateTimeField':
-                try:
-                    datetime_field = getattr(obj, field.name)
-                    if datetime_field is not None:
-                        datetime_value = datetime_field.replace(tzinfo=None)
-                    else:
-                        datetime_value = ''
-                except ValueError:
-                    continue
-                # カスタム書式を設定する
-                style = xlwt.XFStyle()
-                style.num_format_str = 'yyyy/m/d hh:mm:ss'
-                # セルに値を書き込む
-                # worksheet.write(row, col, datetime_value, style=style)
-                worksheet.write(row, col, datetime_value)
-                worksheet.row(row).set_style(style)
-            else:
-                # write the field value to the worksheet
-                worksheet.write(row, col, getattr(obj, field.name))
-            col += 1
-        row += 1
-
-    # save workbook to output file path
-    workbook.save(output_file_path)
-
-
-# 外部参照キー未対応(削除予定)
-def export_model_to_excel_20230326(model: Model, output_file_path: str):
-    # Excelファイルを作成
-    workbook = openpyxl.Workbook()
-    worksheet = workbook.active
-    # ヘッダ行を追加
-    headers = [field.name for field in model._meta.fields]
-    worksheet.append(headers)
-    # データ行を追加
-    for obj in model.objects.all():
-        row = [getattr(obj, field) for field in headers]
-        worksheet.append(row)
-    # Excelファイルを保存
-    workbook.save(output_file_path)
-
