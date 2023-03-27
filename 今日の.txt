@@ -32,6 +32,7 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 承認者
 
 品質・安全変更管理ツール　フォルダまとめる
+
 事前
 ・templatesのフォルダ
 ・appフォルダ
@@ -39,25 +40,39 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 ・css
 ・ライブラリ確認
 ・マイグレーション
+・settings.py
+・db_router.py
+
 当日
 ・configのurls.py
 ・top_page.html
-・settings.py
+・
+・
 ・
 
-
 ④
-fmsモデルをコピー
-openpyxlに変更！
-
-⑤
 順番
-Action,Page,Request,Step,Target
-その他
+【品質・安全変更管理ツール】
+　1.Action,Page,Request,Step,Target
+　2.その他
+【fms】
+　1.,,,,,,,,,
+　2.この中で更に上位があるかどうか。
+　ApplicationClassMaster,AmountUnitMaster,
+　BusinessYearMaster,BudgetClassMaster,BudgetConditionMaster,
+　ConcentrationUnitMaster,CheckList,CheckItemMaster,
+　DepartmentMaster,
+　EvaluationCriteriaMaster,EvaluationPointMaster,ExchangeTypeMaster,
+　FunctionMaster,
+　MPlanBasisMaster,MaterialStateMaster,MaintenanceEstimateStatusMaster,
+　PeriodClassMaster,ProcessMaster,PurposeClassMaster,PlanClassMaster,PressureUnitMaster,Phenomenon,
+　RegulationMaster,
+　StepMaster,
+　TargetMaster,
+　User,
+　WorkClassMaster,
+　3.その他
+
 
 他に特殊型あるかなぁ。。。。
-
-
-
-
 
