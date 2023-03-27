@@ -12,7 +12,11 @@ from openpyxl.utils import datetime
 import xlwt
 import xlrd
 import os
+from socket import gethostname
 import pandas as pd
+
+
+host_name = gethostname()
 
 
 def get_excluded_app_list():
@@ -75,11 +79,198 @@ def delete_test(request):
     return render(request, 'app/app.html', data)
 
 
+def import_excel_to_model(model: Model, file_name, output_folder_path):
+    print(file_name + 'を処理しています')
+    fields = model._meta.fields
+    kwargs = {}
+
+    # Excelファイル読込
+    workbook = openpyxl.load_workbook(output_folder_path + '/' + file_name + '.xlsx')
+    worksheet = workbook.active
+
+    # 項目の取得
+    column_names = []
+    for cell in worksheet[1]:
+        column_names.append(cell.value)
+
+    # データの取得
+    for column_data in worksheet.iter_rows(min_row=2):
+        for i in range(len(column_names)):
+            # print('項目名：' + column_names[i] + '値：' + column_data[i].value)
+
+            # 外部参照キーの場合、参照元テーブルのインスタンスを格納
+            if fields[i].get_internal_type() == 'ForeignKey':
+                try:
+                    # 参照元テーブルのインスタンス取得
+                    if column_data[i].value is not None:
+                        ref_pk = column_data[i].value
+                        ref_model = fields[i].remote_field.model
+                        ref_instance = ref_model.objects.get(pk=ref_pk)
+                        kwargs[column_names[i]] = ref_instance
+                    else:
+                        kwargs[column_names[i]] = None
+                except ValueError:
+                    continue
+            else:
+                kwargs[column_names[i]] = column_data[i].value
+
+        # 1行ずつIMPORT処理
+        # globals()[file_name].objects.create(**{column_names[i]: column_data[i].value})  # 辞書に変換する構文
+        # kwargs = dict(zip(column_names, column_datas))
+        globals()[file_name].objects.create(**kwargs)
+
+    return
+
+
+def import_data(request):
+    today = str(date.today())
+    app_name = request.POST['app_name']
+    if host_name == 'I7781DN7':
+        output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name + '_import'
+    else:
+        output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name + '_import'
+
+    # フォルダを作成する
+    Path(output_folder_path).mkdir(parents=True, exist_ok=True)
+
+    # ファイルが1件もない
+    if request.FILES.__len__() == 0:
+        breakpoint
+
+    # import用EXCELファイルの読み込み
+    else:
+        for file in request.FILES.getlist('import_file'):
+            # ファイル名をファイル名部分と拡張子部分で分ける
+            file_name, ext = os.path.splitext(file.name)
+            # 「.xls」形式でExcelファイルを開く
+            df = pd.read_excel(file, engine='xlrd')
+            # 「.xlsx」形式でExcelファイルを保存する
+            df.to_excel(output_folder_path + '/' + file_name + '.xlsx', index=False)
+            # ModelClass指定でModel情報取得
+            model_data = apps.get_model(app_name, file_name)  # "app_name.ModelName"
+            import_excel_to_model(model_data, file_name, output_folder_path)
+
+    print('import完了')
+
+    data = {
+        'app_list': get_excluded_app_list(),
+        'message': 'データをimportしました'
+    }
+
+    return render(request, 'app/app.html', data)
+
+
+# 外部参照キー対応
+def export_model_to_excel(model: Model, output_file_path: str):
+    # get all fields
+    fields = model._meta.fields
+
+    # create workbook and worksheet
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet(model.__name__)
+
+    # write headers
+    for i, field in enumerate(fields):
+        worksheet.write(0, i, field.name)
+
+    # write data
+    row = 1
+    for obj in model.objects.all():
+        col = 0
+        for field in fields:
+            if field.get_internal_type() == 'ForeignKey':
+                # check if foreign key value can be converted to
+                try:
+                    # 参照先テーブルの外部参照キー項目
+                    foreignkey_field = getattr(obj, field.name)
+
+                    # 参照元テーブルの主キー取得
+                    if foreignkey_field is not None:
+                        # ①参照元テーブルの主キー値取得
+                        foreignkey_value = foreignkey_field.pk
+                        # ②参照元テーブルの主キーを取得してから値を取得
+                        # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
+                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
+                    else:
+                        foreignkey_value = ''
+
+                except ValueError:
+                    continue
+                # write the foreign key value to the worksheet
+                worksheet.write(row, col, foreignkey_value)
+            elif field.get_internal_type() == 'DateField':
+                try:
+                    date_value = getattr(obj, field.name)
+                except ValueError:
+                    continue
+                # カスタム書式を設定する
+                style = xlwt.XFStyle()
+                style.num_format_str = 'yyyy/mm/dd'
+                # セルに値を書き込む
+                worksheet.write(row, col, date_value, style=style)
+            elif field.get_internal_type() == 'DateTimeField':
+                try:
+                    datetime_value = getattr(obj, field.name).replace(tzinfo=None)
+                except ValueError:
+                    continue
+                # カスタム書式を設定する
+                style = xlwt.XFStyle()
+                style.num_format_str = 'yyyy/m/d hh:mm:ss'
+                # セルに値を書き込む
+                worksheet.write(row, col, datetime_value, style=style)
+            else:
+                # write the field value to the worksheet
+                worksheet.write(row, col, getattr(obj, field.name))
+            col += 1
+        row += 1
+
+    # save workbook to output file path
+    workbook.save(output_file_path)
+
+
+# Model名を指定して、Excelファイルに出力する
+def export_data(request):
+    today = str(date.today())
+    app_name = request.POST['app_name']
+    if host_name == 'I7781DN7':
+        output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name
+    else:
+        output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name
+
+    # フォルダを作成する
+    Path(output_folder_path).mkdir(parents=True, exist_ok=True)
+
+    # ModelClass指定でModel情報取得
+    # model_data = apps.get_model("app_name.ModelName")  # "app_name.ModelName"
+    # プロジェクトの全Model情報取得
+    # model_list = apps.get_models()
+    # アプリ毎のModel情報取得
+    app = apps.get_app_config(app_name)  # アプリケーション名で指定したアプリケーションオブジェクトを取得
+    model_list = app.get_models()  # アプリケーション内の全モデルを取得
+
+    # モデル名のリストを取得、export
+    for model in model_list:
+        print('App名：' + str(app) + ', Model名：' + model.__name__)
+        model_data = app.get_model(model.__name__)  # "app_name.ModelName"
+        output_file_path = output_folder_path + '/' + model.__name__ + ".xls"
+        export_model_to_excel(model_data, output_file_path)
+
+    data = {
+        'app_list': get_excluded_app_list(),
+        'app_name': app_name,
+        'message': app_name + 'をexportしました'
+    }
+
+    return render(request, 'app/app.html', data)
+
+
 def excel_import(request):
 
     # import用EXCELファイルの読み込み
-    # file_path = 'C:\\Users\\y-kawauchi\\python_tool_development\\sqlite_test\\app\\データ移行.xlsx'
-    file_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/app/データ移行.xlsx'
+    if host_name == 'I7781DN7':
+        file_path = 'C:\\Users\\y-kawauchi\\python_tool_development\\sqlite_test\\app\\データ移行.xlsx'
+    else:
+        file_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/app/データ移行.xlsx'
 
     book = openpyxl.load_workbook(file_path)
 
@@ -225,176 +416,6 @@ def excel_import(request):
     return render(request, 'app/app.html', data)
 
 
-def import_excel_to_model(model: Model, file_name, output_folder_path):
-    print(file_name + 'を処理しています')
-    fields = model._meta.fields
-    kwargs = {}
-
-    # Excelファイル読込
-    workbook = openpyxl.load_workbook(output_folder_path + '/' + file_name + '.xlsx')
-    worksheet = workbook.active
-
-    # 項目の取得
-    column_names = []
-    for cell in worksheet[1]:
-        column_names.append(cell.value)
-
-    # データの取得
-    for column_data in worksheet.iter_rows(min_row=2):
-        for i in range(len(column_names)):
-            # print('項目名：' + column_names[i] + '値：' + column_data[i].value)
-
-            # 外部参照キーの場合、参照元テーブルのインスタンスを格納
-            if fields[i].get_internal_type() == 'ForeignKey':
-                try:
-                    # 参照元テーブルのインスタンス取得
-                    if column_data[i].value is not None:
-                        ref_pk = column_data[i].value
-                        ref_model = fields[i].remote_field.model
-                        ref_instance = ref_model.objects.get(pk=ref_pk)
-                        kwargs[column_names[i]] = ref_instance
-                    else:
-                        kwargs[column_names[i]] = None
-                except ValueError:
-                    continue
-            else:
-                kwargs[column_names[i]] = column_data[i].value
-
-        # 1行ずつIMPORT処理
-        # globals()[file_name].objects.create(**{column_names[i]: column_data[i].value})  # 辞書に変換する構文
-        # kwargs = dict(zip(column_names, column_datas))
-        print(kwargs)
-        globals()[file_name].objects.create(**kwargs)
-
-    return
-
-
-def import_data(request):
-    today = str(date.today())
-    app_name = request.POST['app_name']
-    output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name
-    # output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name
-
-    # フォルダを作成する
-    Path(output_folder_path).mkdir(parents=True, exist_ok=True)
-
-    # ファイルが1件もない
-    if request.FILES.__len__() == 0:
-        breakpoint
-
-    # import用EXCELファイルの読み込み
-    else:
-        for file in request.FILES.getlist('import_file'):
-            # ファイル名をファイル名部分と拡張子部分で分ける
-            file_name, ext = os.path.splitext(file.name)
-            # 「.xls」形式でExcelファイルを開く
-            df = pd.read_excel(file, engine='xlrd')
-            # 「.xlsx」形式でExcelファイルを保存する
-            df.to_excel(output_folder_path + '/' + file_name + '.xlsx', index=False)
-            # ModelClass指定でModel情報取得
-            model_data = apps.get_model(app_name, file_name)  # "app_name.ModelName"
-            import_excel_to_model(model_data, file_name, output_folder_path)
-
-    print('import完了')
-
-    data = {
-        'app_list': get_excluded_app_list(),
-        'message': 'データをimportしました'
-    }
-
-    return render(request, 'app/app.html', data)
-
-
-# 外部参照キー対応
-def export_model_to_excel(model: Model, output_file_path: str):
-    # get all fields
-    fields = model._meta.fields
-
-    # create workbook and worksheet
-    workbook = xlwt.Workbook(encoding='utf-8')
-    worksheet = workbook.add_sheet(model.__name__)
-
-    # write headers
-    for i, field in enumerate(fields):
-        worksheet.write(0, i, field.name)
-
-    # write data
-    row = 1
-    for obj in model.objects.all():
-        col = 0
-        for field in fields:
-            if field.get_internal_type() == 'ForeignKey':
-                # check if foreign key value can be converted to
-                try:
-                    # 参照先テーブルの外部参照キー項目
-                    foreignkey_field = getattr(obj, field.name)
-
-                    # 参照元テーブルの主キー取得
-                    if foreignkey_field is not None:
-                        # ①参照元テーブルの主キー値取得
-                        foreignkey_value = foreignkey_field.pk
-                        # ②参照元テーブルの主キーを取得してから値を取得
-                        # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
-                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
-                    else:
-                        foreignkey_value = ''
-
-                except ValueError:
-                    continue
-                # write the foreign key value to the worksheet
-                worksheet.write(row, col, foreignkey_value)
-            elif field.get_internal_type() == 'DateTimeField':
-                try:
-                    # datetime_value = getattr(obj, field.name).replace(tzinfo=None)
-                    datetime_value = datetime.datetime.strftime(getattr(obj, field.name).replace(tzinfo=None), '%Y-%m-%d')
-                except ValueError:
-                    continue
-                # write the datetime key value to the worksheet
-                worksheet.write(row, col, datetime_value)
-            else:
-                # write the field value to the worksheet
-                worksheet.write(row, col, getattr(obj, field.name))
-            col += 1
-        row += 1
-
-    # save workbook to output file path
-    workbook.save(output_file_path)
-
-
-# Model名を指定して、Excelファイルに出力する
-def export_data(request):
-    today = str(date.today())
-    app_name = request.POST['app_name']
-    output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name
-    # output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name
-
-    # フォルダを作成する
-    Path(output_folder_path).mkdir(parents=True, exist_ok=True)
-
-    # ModelClass指定でModel情報取得
-    # model_data = apps.get_model("app_name.ModelName")  # "app_name.ModelName"
-    # プロジェクトの全Model情報取得
-    # model_list = apps.get_models()
-    # アプリ毎のModel情報取得
-    app = apps.get_app_config(app_name)  # アプリケーション名で指定したアプリケーションオブジェクトを取得
-    model_list = app.get_models()  # アプリケーション内の全モデルを取得
-
-    # モデル名のリストを取得、export
-    for model in model_list:
-        print('App名：' + str(app) + ', Model名：' + model.__name__)
-        model_data = app.get_model(model.__name__)  # "app_name.ModelName"
-        output_file_path = output_folder_path + '/' + model.__name__ + ".xls"
-        export_model_to_excel(model_data, output_file_path)
-
-    data = {
-        'app_list': get_excluded_app_list(),
-        'app_name': app_name,
-        'message': app_name + 'をexportしました'
-    }
-
-    return render(request, 'app/app.html', data)
-
-
 def test_function(request):
 
     kwargs = {
@@ -443,3 +464,4 @@ def export_model_to_excel2(model: Model, output_file_path: str):
         worksheet.append(row)
     # Excelファイルを保存
     workbook.save(output_file_path)
+
