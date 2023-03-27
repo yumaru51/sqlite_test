@@ -29,6 +29,8 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 
 
 ③
+承認者
+
 品質・安全変更管理ツール　フォルダまとめる
 事前
 ・templatesのフォルダ
@@ -43,22 +45,16 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 ・settings.py
 ・
 
+
 ④
-Datefield型対応
-SQLSERVERからデータEXPORTしてDatefield型のセルがどうなっているか確認。
-またsqlite3にIMPORTできるか確認。
-
-
-
-⑤
 fmsモデルをコピー
 
-⑥
+⑤
 順番
 Action,Page,Request,Step,Target
 その他
 
-他に特殊な型あるかなぁ。。。。
+他に特殊型あるかなぁ。。。。
 
 
 

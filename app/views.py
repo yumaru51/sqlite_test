@@ -9,6 +9,9 @@ from pathlib import Path
 from datetime import date
 import openpyxl
 from openpyxl.utils import datetime
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, NamedStyle, numbers
+from openpyxl.utils import get_column_letter
 import xlwt
 import xlrd
 import os
@@ -46,7 +49,6 @@ def output_test(request):
     data = {
         'app_list': get_excluded_app_list(),
         'output': TargetMaster.objects.all,
-        'output2': StepMaster.objects.all,
         'message': 'データを出力しました'
     }
 
@@ -161,22 +163,35 @@ def import_data(request):
 
 
 # 外部参照キー対応
-def export_model_to_excel(model: Model, output_file_path: str):
+def export_model_to_excel(model, output_file_path):
     # get all fields
     fields = model._meta.fields
 
     # create workbook and worksheet
-    workbook = xlwt.Workbook(encoding='utf-8')
-    worksheet = workbook.add_sheet(model.__name__)
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Sheet1'
+
+    # create custom named style 別に書式とかはいらないけど、、、
+    date_style = NamedStyle(name='date_style')
+    date_style.font = Font(name='Calibri', size=11, bold=False)
+    date_style.alignment = Alignment(horizontal='left', vertical='center')
+    date_style.number_format = 'yyyy/mm/dd'
+
+    datetime_style = NamedStyle(name='datetime_style')
+    datetime_style.font = Font(name='Calibri', size=11, bold=False)
+    datetime_style.alignment = Alignment(horizontal='left', vertical='center')
+    datetime_style.number_format = 'yyyy/m/d hh:mm:ss'
 
     # write headers
     for i, field in enumerate(fields):
-        worksheet.write(0, i, field.name)
+        col_letter = get_column_letter(i+1)
+        worksheet[col_letter + '1'] = field.name
 
     # write data
-    row = 1
+    row = 2
     for obj in model.objects.all():
-        col = 0
+        col = 1
         for field in fields:
             if field.get_internal_type() == 'ForeignKey':
                 # check if foreign key value can be converted to
@@ -190,37 +205,40 @@ def export_model_to_excel(model: Model, output_file_path: str):
                         foreignkey_value = foreignkey_field.pk
                         # ②参照元テーブルの主キーを取得してから値を取得
                         # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
-                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
+                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ？
                     else:
                         foreignkey_value = ''
-
                 except ValueError:
                     continue
                 # write the foreign key value to the worksheet
-                worksheet.write(row, col, foreignkey_value)
+                worksheet.cell(row=row, column=col, value=foreignkey_value)
+
             elif field.get_internal_type() == 'DateField':
                 try:
                     date_value = getattr(obj, field.name)
                 except ValueError:
                     continue
-                # カスタム書式を設定する
-                style = xlwt.XFStyle()
-                style.num_format_str = 'yyyy/mm/dd'
-                # セルに値を書き込む
-                worksheet.write(row, col, date_value, style=style)
+                # write datetime value with custom style
+                cell = worksheet.cell(row=row, column=col, value=date_value)
+                cell.style = date_style
+
             elif field.get_internal_type() == 'DateTimeField':
                 try:
-                    datetime_value = getattr(obj, field.name).replace(tzinfo=None)
+                    datetime_field = getattr(obj, field.name)
+                    if datetime_field is not None:
+                        datetime_value = datetime_field.replace(tzinfo=None)
+                    else:
+                        datetime_value = ''
                 except ValueError:
                     continue
-                # カスタム書式を設定する
-                style = xlwt.XFStyle()
-                style.num_format_str = 'yyyy/m/d hh:mm:ss'
-                # セルに値を書き込む
-                worksheet.write(row, col, datetime_value, style=style)
+                # write datetime value with custom style
+                cell = worksheet.cell(row=row, column=col, value=datetime_value)
+                cell.style = datetime_style
+
             else:
                 # write the field value to the worksheet
-                worksheet.write(row, col, getattr(obj, field.name))
+                worksheet.cell(row=row, column=col, value=getattr(obj, field.name))
+
             col += 1
         row += 1
 
@@ -252,7 +270,7 @@ def export_data(request):
     for model in model_list:
         print('App名：' + str(app) + ', Model名：' + model.__name__)
         model_data = app.get_model(model.__name__)  # "app_name.ModelName"
-        output_file_path = output_folder_path + '/' + model.__name__ + ".xls"
+        output_file_path = output_folder_path + '/' + model.__name__ + ".xlsx"
         export_model_to_excel(model_data, output_file_path)
 
     data = {
@@ -450,8 +468,85 @@ def test_function(request):
     return render(request, 'app/app.html', data)
 
 
+# 外部参照キー対応
+def export_model_to_excel_20230327(model: Model, output_file_path: str):
+    # get all fields
+    fields = model._meta.fields
+
+    # create workbook and worksheet
+    workbook = xlwt.Workbook(encoding='utf-8')
+    # worksheet = workbook.add_sheet(model.__name__)
+    worksheet = workbook.add_sheet('Sheet1')
+
+    # write headers
+    for i, field in enumerate(fields):
+        worksheet.write(0, i, field.name)
+
+    # write data
+    row = 1
+    for obj in model.objects.all():
+        col = 0
+        for field in fields:
+            if field.get_internal_type() == 'ForeignKey':
+                # check if foreign key value can be converted to
+                try:
+                    # 参照先テーブルの外部参照キー項目
+                    foreignkey_field = getattr(obj, field.name)
+
+                    # 参照元テーブルの主キー取得
+                    if foreignkey_field is not None:
+                        # ①参照元テーブルの主キー値取得
+                        foreignkey_value = foreignkey_field.pk
+                        # ②参照元テーブルの主キーを取得してから値を取得
+                        # pk_name = foreignkey_field._meta.pk.name  # たぶん参照元テーブルとかも取れる？
+                        # foreignkey_value = foreignkey_field.__getattribute__(pk_name)  # 動的にするやつ
+                    else:
+                        foreignkey_value = ''
+
+                except ValueError:
+                    continue
+                # write the foreign key value to the worksheet
+                worksheet.write(row, col, foreignkey_value)
+            elif field.get_internal_type() == 'DateField':
+                try:
+                    date_value = getattr(obj, field.name)
+                except ValueError:
+                    continue
+                # カスタム書式を設定する
+                style = xlwt.XFStyle()
+                style.num_format_str = 'yyyy/mm/dd'
+                # セルに値を書き込む
+                # worksheet.write(row, col, date_value, style=style)
+                worksheet.write(row, col, date_value)
+                worksheet.row(row).set_style(style)
+            elif field.get_internal_type() == 'DateTimeField':
+                try:
+                    datetime_field = getattr(obj, field.name)
+                    if datetime_field is not None:
+                        datetime_value = datetime_field.replace(tzinfo=None)
+                    else:
+                        datetime_value = ''
+                except ValueError:
+                    continue
+                # カスタム書式を設定する
+                style = xlwt.XFStyle()
+                style.num_format_str = 'yyyy/m/d hh:mm:ss'
+                # セルに値を書き込む
+                # worksheet.write(row, col, datetime_value, style=style)
+                worksheet.write(row, col, datetime_value)
+                worksheet.row(row).set_style(style)
+            else:
+                # write the field value to the worksheet
+                worksheet.write(row, col, getattr(obj, field.name))
+            col += 1
+        row += 1
+
+    # save workbook to output file path
+    workbook.save(output_file_path)
+
+
 # 外部参照キー未対応(削除予定)
-def export_model_to_excel2(model: Model, output_file_path: str):
+def export_model_to_excel_20230326(model: Model, output_file_path: str):
     # Excelファイルを作成
     workbook = openpyxl.Workbook()
     worksheet = workbook.active
