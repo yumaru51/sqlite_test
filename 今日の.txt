@@ -47,32 +47,20 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 ・configのurls.py
 ・top_page.html
 ・
-・
-・
-
-④
-順番
-【品質・安全変更管理ツール】
-　1.Action,Page,Request,Step,Target
-　2.その他
-【fms】
-　1.,,,,,,,,,
-　2.この中で更に上位があるかどうか。
-　ApplicationClassMaster,AmountUnitMaster,
-　BusinessYearMaster,BudgetClassMaster,BudgetConditionMaster,
-　ConcentrationUnitMaster,CheckList,CheckItemMaster,
-　DepartmentMaster,
-　EvaluationCriteriaMaster,EvaluationPointMaster,ExchangeTypeMaster,
-　FunctionMaster,
-　MPlanBasisMaster,MaterialStateMaster,MaintenanceEstimateStatusMaster,
-　PeriodClassMaster,ProcessMaster,PurposeClassMaster,PlanClassMaster,PressureUnitMaster,Phenomenon,
-　RegulationMaster,
-　StepMaster,
-　TargetMaster,
-　User,
-　WorkClassMaster,
-　3.その他
 
 
+
+〇manage.pyを2にして、品質・安全変更管理ツールのデータ再度確認
+〇空と正規のdatabaseバックアップとっておきたい
+〇上位調べる
+〇マイグレーション
+×app.views.pyに全Modelをimportする！
+　全宣言は手間。一括インポートする。
+IMPORT処理
+
+admin.pyを整理。
+isk-tool-baseも
+品質・安全変更管理ツール対応
 他に特殊型あるかなぁ。。。。
+
 

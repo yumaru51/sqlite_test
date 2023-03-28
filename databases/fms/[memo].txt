@@ -1,0 +1,25 @@
+　1.
+　User, 
+
+　2.
+　DepartmentMaster, 
+　EvaluationCriteriaMaster, 
+
+　3.
+　AmountUnitMaster, ApplicationClassMaster, 
+　BudgetClassMaster, BudgetConditionMaster, BusinessYearMaster, 
+　CheckItemMaster, CheckList, ConcentrationUnitMaster, 
+　EvaluationPointMaster, ExchangeTypeMaster, 
+　FunctionMaster, 
+　MaintenanceEstimateStatusMaster, MaterialStateMaster, MPlanBasisMaster, 
+　PeriodClassMaster, Phenomenon, PlanClassMaster, PressureUnitMaster, ProcessMaster, PurposeClassMaster, 
+　RegulationMaster, 
+　StepMaster, 
+　TargetMaster, 
+　WorkClassMaster, 
+
+　4.その他
+
+
+
+EXPORT50分程度

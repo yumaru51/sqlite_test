@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, DepartmentMaster, DivisionMaster, UserAttribute
+from .models import User, DepartmentMaster, DivisionMaster, UserAttribute, \
+    EvaluationCriteriaMaster
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -42,3 +43,10 @@ class UserAttributeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserAttribute, UserAttributeAdmin)
+
+
+class EvaluationCriteriaMasterAdmin(admin.ModelAdmin):
+    list_display = ('target', 'criteria_cd', 'criteria_detail', 'display_order', 'lost_flag')
+
+
+admin.site.register(EvaluationCriteriaMaster, EvaluationCriteriaMasterAdmin)

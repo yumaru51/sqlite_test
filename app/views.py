@@ -17,8 +17,6 @@ import xlrd
 import os
 from socket import gethostname
 import pandas as pd
-
-
 host_name = gethostname()
 
 
@@ -121,7 +119,8 @@ def import_excel_to_model(model: Model, file_name, file):
         # 1行ずつIMPORT処理
         # globals()[file_name].objects.create(**{column_names[i]: column_data[i].value})  # 辞書に変換する構文
         # kwargs = dict(zip(column_names, column_datas))
-        globals()[file_name].objects.create(**kwargs)
+        # globals()[file_name].objects.create(**kwargs)  # これだとライブラリimportが必要。
+        model.objects.create(**kwargs)
 
     return
 
