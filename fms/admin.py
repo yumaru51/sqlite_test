@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import User, DepartmentMaster, DivisionMaster, UserAttribute, \
-    EvaluationCriteriaMaster
+    EvaluationCriteriaMaster, Phenomenon
+from django.apps import apps  # app情報を取得
+
+model = apps.get_models()
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -50,3 +53,11 @@ class EvaluationCriteriaMasterAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EvaluationCriteriaMaster, EvaluationCriteriaMasterAdmin)
+
+
+@admin.register(Phenomenon)
+class PhenomenonAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Phenomenon._meta.get_fields()]
+    list_filter = [field.name for field in Phenomenon._meta.get_fields() if field.get_internal_type() == 'ForeignKey']
+    search_fields = [field.name for field in Phenomenon._meta.get_fields() if field.get_internal_type() == 'CharField']
+    pass

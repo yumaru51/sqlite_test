@@ -180,7 +180,8 @@ class Request(models.Model):
     others2 = models.CharField('その他', max_length=40, blank=True, null=True)                   # 原課変更実施
 
     completion_date = models.DateField('完了日', blank=True, null=True)
-    application_date = models.DateField('申請日', blank=True, null=True, default=datetime.datetime.today())
+    # application_date = models.DateField('申請日', blank=True, null=True, default=datetime.datetime.today())
+    application_date = models.DateField('申請日', blank=True, null=True, auto_now_add=True)
     education_management_system_id = models.CharField('教育管理システムID', max_length=40, blank=True, null=True)
 
     class Meta:
