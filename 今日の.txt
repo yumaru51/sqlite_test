@@ -58,18 +58,13 @@ masterからブランチ作成。
 
 ④
 IMPORT処理
-★マイグレーション
-　fmsのマイグレーションがうまくいかないよ。
-×app.views.pyに全Modelをimportする！
-　全宣言は手間。一括インポートする。
-IMPORT処理
-
 admin.pyを整理。
 isk-tool-baseも
 品質・安全変更管理ツール対応
-他に特殊型あるかなぁ。。。。
+他に特殊型あるかなぁ。。。。。。
 
 
-Phenomenonダメ？
 
+
+DateTimeField対応
 

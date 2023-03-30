@@ -19,6 +19,7 @@
 　WorkClassMaster, 
 
 　4.その他
+　「fms_attachmentdocuments」「fms_log」はめちゃ重い
 
 
 

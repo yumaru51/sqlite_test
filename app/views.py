@@ -6,17 +6,14 @@ from quality_change_management.models import TargetMaster, PageMaster, ActionMas
     Log, Request, Quality, Safety, Progress
 from fms.models import User, DepartmentMaster, DivisionMaster, UserAttribute
 from pathlib import Path
-from datetime import date
+from datetime import date, datetime, timezone, timedelta
 import openpyxl
-from openpyxl.utils import datetime
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Alignment, NamedStyle, numbers
 from openpyxl.utils import get_column_letter
-import xlwt
-import xlrd
+import xlwt  # 不要!
 import os
 from socket import gethostname
-import pandas as pd
 host_name = gethostname()
 
 
@@ -113,6 +110,16 @@ def import_excel_to_model(model: Model, file_name, file):
                         kwargs[column_names[i]] = None
                 except ValueError:
                     continue
+            elif fields[i].get_internal_type() == 'DateTimeField':
+                try:
+                    # 日付データを文字型からフォーマット変換
+                    if column_data[i].value is not None:
+                        date_time_field = column_data[i].value
+                        kwargs[column_names[i]] = date_time_field.astimezone(timezone(timedelta(hours=9), 'JST'))
+                    else:
+                        kwargs[column_names[i]] = None
+                except ValueError:
+                    continue
             else:
                 kwargs[column_names[i]] = column_data[i].value
 
@@ -150,11 +157,6 @@ def import_data(request):
         for file in request.FILES.getlist('import_file'):
             # ファイル名をファイル名部分と拡張子部分で分ける
             file_name, ext = os.path.splitext(file.name)
-
-            # 「.xls」形式でExcelファイルを開く
-            # df = pd.read_excel(file, engine='openpyxl')
-            # 「.xlsx」形式でExcelファイルを保存する
-            # df.to_excel(output_folder_path + '/' + file_name + '.xlsx', index=False)
 
             # ModelClass指定でModel情報取得
             model_data = apps.get_model(app_name, file_name)  # "app_name.ModelName"
