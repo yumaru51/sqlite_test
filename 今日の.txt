@@ -33,38 +33,10 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 
 
 ③
-品質・安全変更管理ツール　フォルダまとめる
-masterからブランチ作成。
-下記を反映させる。
-サービス止めて、masterにマージ。
-マイグレーション。
-サービス起動。
+〇IMPORT処理
+データベース圧縮！
 
-事前
-・templatesのフォルダ
-・appフォルダ
-・js
-・css
-・ライブラリ確認
-・マイグレーション
-・settings.py
-・db_router.py
-
-当日
-・configのurls.py
-・top_page.html
-・
-
-
-④
-IMPORT処理
 admin.pyを整理。
 isk-tool-baseも
 品質・安全変更管理ツール対応
-他に特殊型あるかなぁ。。。。。。
-
-
-
-
-DateTimeField対応
 
