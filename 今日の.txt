@@ -34,9 +34,8 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 
 ③
 〇IMPORT処理
-データベース圧縮！
-
+〇データベース圧縮！
+△isk-tool-baseも
 admin.pyを整理。
-isk-tool-baseも
 品質・安全変更管理ツール対応
 
