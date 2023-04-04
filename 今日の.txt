@@ -31,11 +31,37 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 「登録日時」項目にはauto_now_add=Trueをつければ、自動挿入され、更新されない。
 「更新日時」項目にはauto_now=Trueをつければ、自動挿入され、データ更新毎に更新される。
 
+黄色はignore
+home→isk-tools
+sqlite_test→yumaru_app
+
 
 ③
-〇IMPORT処理
-〇データベース圧縮！
-△isk-tool-baseも
-admin.pyを整理。
-品質・安全変更管理ツール対応
+使ってないライブラリ消したい。
+
+
+④
+デバックができるように再作成！
+
+プロジェクト作成
+ライブラリインストール。requirements.txtを丸投げ。
+.gitignore丸投げ。
+templateは丸投げ。staticも丸投げ。
+django-admin startproject config .
+python manage.py startapp fms
+python manage.py startapp quality_change_management
+★GITに共有
+settings.pyを変更。不要なapp消す。
+manage.pyを変更。db_router.py丸投げ。
+★GITに共有
+プロジェクトのurlを追加
+アプリのurlを追加
+★GITに共有
+ここまできたら、一度デバック確認。test.py追加でデバッグ。
+databaseをコピー。だがGITにはあげない。
+各admin.pyを丸投げ。
+★GITに共有
+
+
+
 

@@ -1,5 +1,2 @@
 venv/
-.idea/vcs.xml
-.idea/misc.xml
-.idea/sqlite_test.iml
-databases/fms_db.sqlite3
+databases/*.sqlite3
