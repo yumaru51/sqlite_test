@@ -48,7 +48,7 @@ sqlite_test→yumaru_app
 .gitignore丸投げ。
 templateは丸投げ。staticも丸投げ。
 django-admin startproject config .
-python manage.py startapp fms
+python manage.py startapp fmscm
 python manage.py startapp quality_change_management
 ★GITに共有
 settings.pyを変更。不要なapp消す。
