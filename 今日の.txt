@@ -63,5 +63,10 @@ databaseをコピー。だがGITにはあげない。
 ★GITに共有
 
 
-
+⑤
+マニュアル整理(フォルダ作って入れる。)
+GIT整理(home,isk-tools1,2消す)
+コメントアウト削除()
+mac初期化
+discordの音声BOTとchatgpt勉強
 
