@@ -31,10 +31,6 @@ settingをフォルダに格納するので、更に一個追加で囲む。
 「登録日時」項目にはauto_now_add=Trueをつければ、自動挿入され、更新されない。
 「更新日時」項目にはauto_now=Trueをつければ、自動挿入され、データ更新毎に更新される。
 
-黄色はignore
-home→isk-tools
-sqlite_test→yumaru_app
-
 
 ③
 使ってないライブラリ消したい。
