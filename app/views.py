@@ -11,7 +11,7 @@ import openpyxl
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Alignment, NamedStyle, numbers
 from openpyxl.utils import get_column_letter
-import xlwt  # 不要!
+# import xlwt  # 不要!
 import os
 from socket import gethostname
 host_name = gethostname()
