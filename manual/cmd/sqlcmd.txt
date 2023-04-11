@@ -1,0 +1,14 @@
+バッチ例
+sqlcmd -S Y0033OUT -E -i \\yfileserv\情報システム\USERS\川内\テキトー\test.sql
+
+-S	サーバー名のホスト(Y0033OUT)
+-U	ユーザID
+-P	パスワード
+-E	Windows認証モード
+-i	ファイル
+
+コマンド例
+sqlcmd -S サーバ名 -E
+>1USE db1
+>2select getdate()
+>3go

@@ -1,0 +1,38 @@
+・if(oRS.EOF = False)then 
+　値が存在したらTrue
+
+　BOF：カレントレコードの位置が先頭のレコードより前にある場合はTrue
+　EOF：カレントレコードの位置が最後のレコードより後にある場合はTrue
+
+・値が存在しなかったら通る
+　If (oRS.RecordCount = 0) Then
+
+・Public全てのモジュール内で使用可能　Dimそのモジュール内だけ（先頭で宣言する、一時的に使いたいときはプロシージャ内で宣言）＝Private
+・CallしたいやつはPublic　指定なしはPublic
+
+・エラー文
+ On Error Goto エラー処理名
+ Exit Sub
+ エラー処理名 :    MsgBox "エラー番号:" & Err.Number
+    		   MsgBox "エラー内容：" & Err.Description
+    		   MsgBox "ヘルプファイル名" & Err.HelpContext
+    		   MsgBox "プロジェクト名：" & Err.Source
+    		   Resume Next
+ End Sub
+
+
+
+
+現在時刻
+日付 Date
+時間 Time
+両方 Now
+
+
+
+
+エクセルのデータをアクセスのテーブルにインポート・エクスポート	1行目をヘッダーにして項目一致でインポート　項目名が違うとエラー　オートナンバーは項目不要でOK
+ DoCmd.TransferSpreadsheet acImport, acSpreadsheetTypeExcel12Xml(←形式を書く), "テーブル名", FolderB & "\" & myFile.Name(テーブル名、パスから),
+ True(一行目をヘッダーにするかどうか、falseの場合はレンジを書く)
+
+

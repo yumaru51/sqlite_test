@@ -1,0 +1,11 @@
+
+・
+@echo off
+
+・出力 cmd画面にコメント出力
+echo %date%%time%
+
+・表示文字をファイルに出力
+echo [表示文字] >path&filename(上書き)
+echo [表示文字] >>path&filename(追記)
+例 echo 動作確認 > 動作確認.txt

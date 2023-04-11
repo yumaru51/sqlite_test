@@ -1,0 +1,2 @@
+
+SELECT DISTINCT B.”Ž® FROM [ISKFMP_test].[dbo].[TM_ŒŸ¸€–Ú] B WHERE B.”Ž® IS NOT NULL AND B.”Ž® != ''

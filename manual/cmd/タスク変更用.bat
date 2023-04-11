@@ -1,0 +1,2 @@
+SCHTASKS /Change /TN 変更管理ツール件数通知 /TR '"C:\Windows\SysWOW64\wscript.exe"''"C:\Program Files (x86)\作業件数通知\変更管理作業件数通知.vbs"' /RU Users
+SCHTASKS /Change /TN 工事情報管理ツール件数通知 /TR '"C:\Windows\SysWOW64\wscript.exe"''"C:\Program Files (x86)\作業件数通知\作業件数通知.vbs"' /RU Users

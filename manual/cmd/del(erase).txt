@@ -1,0 +1,3 @@
+
+・ファイル削除
+del(erase) aa\\bb\\cc\\dd\\ee

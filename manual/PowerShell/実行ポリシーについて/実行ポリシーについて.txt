@@ -1,0 +1,24 @@
+
+-ExecutionPolicy
+
+・AllSigned: PowerShellスクリプトには、
+　デジタル署名された証明書が必要です。信頼できる発行者によって署名されているスクリプトしか実行できません。
+・Bypass: PowerShellスクリプトを実行する際のセキュリティポリシーが無視されます。
+　スクリプトの実行には、セキュリティ上のリスクが伴います。
+
+【タスク実行】
+実行セキュリティポリシーでガードされている場合は、バッチを経由してからタスク実行する。
+
+　powershell -ExecutionPolicy Bypass -File "PowerShellPath"
+　例:powershell -ExecutionPolicy Bypass -File "C:\Users\y-kawauchi\Desktop\TaskMail.ps1"
+
+
+
+【powershellで変更】
+下記で変更可能だが、レジストリですぐに戻る。
+変更方法
+Set-ExecutionPolicy RemoteSigned
+
+戻す方法
+Set-ExecutionPolicy Restricted
+

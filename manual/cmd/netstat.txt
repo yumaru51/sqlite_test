@@ -1,0 +1,7 @@
+
+ネットワーク接続状況のポート番号まで確認
+
+netstat -ano>C:\Users\piadmin\Desktop\test.txt
+
+
+https://www.k-tanaka.net/cmd/netstat.php

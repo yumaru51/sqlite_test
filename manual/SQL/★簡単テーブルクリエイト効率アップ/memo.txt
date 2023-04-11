@@ -1,0 +1,4 @@
+CREATE1に名前、型などをエクセルとして入力
+CREATE2のとこに挿入してSQLServerで実行
+
+元のSQLServerのをコピーも可能

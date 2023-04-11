@@ -1,0 +1,44 @@
+
+レジストリをいじる！管理者権限がないと難しそう！
+
+
+C:\>runas /savecred /user:app_admin /password:support@ cmd
+
+ファイル拡張子のファイル・タイプを確認する
+assoc .html
+assoc .htm
+
+ファイル・タイプの起動プログラムを確認
+ftype htmlfile
+
+既定のアプリ変更(chrome)
+ftype htmlfile="C:\Program Files\Google\Chrome\Application\chrome.exe"
+
+既定のアプリ変更(ID)
+ftype htmlfile="C:\Program Files\Internet Explorer\iexplore.exe"
+
+assoc .html=ChromeHTML
+assoc .htm=ChromeHTML
+ftype HTTP=C:\Program Files\Google\Chrome\Application\chrome.exe -url "%1"
+ftype http="C:\Program Files\Google\Chrome\Application\chrome.exe" "%1"
+
+
+?
+ftype IE.AssocFile.HTM="C:\Program Files\Google\Chrome\Application\chrome.exe" %1
+?
+ftype InternetShortcut
+
+?
+ftype InternetShortcut="C:\WINDOWS\system32\rundll32.exe" "C:\WINDOWS\system32\ieframe.dll",OpenURL %l
+ftype InternetShortcut="C:\WINDOWS\system32\rundll32.exe" "C:\Program Files\Google\Chrome\Application\chrome.exe",OpenURL %l
+
+
+ftype | find /I "Chrome.exe"
+ftype | find /I "IE.AssocFile.HTM"
+
+
+reg query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.html\UserChoice" /v "ProgId"
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.html\UserChoice" /v "ProgId" /t "REG_SZ" /d "ChromeHTML" /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.html\UserChoice" /v "ProgId" /t "REG_SZ" /d "ChromeHTML" /f
+
+

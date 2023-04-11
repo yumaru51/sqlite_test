@@ -1,0 +1,6 @@
+
+予約変数
+%USERNAME%
+
+cmdに表示
+echo %USERNAME%

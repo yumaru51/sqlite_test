@@ -1,0 +1,3 @@
+
+・フォルダ削除(全削除)
+rd(rmdir) aa\\bb\\cc\\dd\\ee (/s)

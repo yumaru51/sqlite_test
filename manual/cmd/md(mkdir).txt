@@ -1,0 +1,3 @@
+
+・フォルダ作成
+md(mkdir) aa\\bb\\cc\\dd\\ee

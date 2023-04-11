@@ -1,0 +1,16 @@
+
+Dim SQL As String
+Dim DB用 As New ADODB.Connection
+Dim レコード用 As ADODB.Recordset
+    
+Set DB用 = New ADODB.Connection
+DB用.ConnectionString = "Provider=SQLOLEDB; Data Source=HOST名; User Id=sa; Password=iskisk6117; Initial Catalog=DB名;"
+DB用.Open
+    
+Set レコード用 = New ADODB.Recordset
+レコード用.CursorLocation = adUseClient
+SQL = "SELECT VALUE FROM TEST WHERE ID = 1"
+'レコード用.Open SQL, DB用, adOpenDynamic, adLockReadOnly
+Set レコード用 = DB用.Execute(SQL)
+MsgBox レコード用!VALUE
+

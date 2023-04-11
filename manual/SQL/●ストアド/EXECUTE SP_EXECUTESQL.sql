@@ -1,0 +1,28 @@
+
+/*項目名、テーブル名を動的にしたい場合、動的クエリを利用する*/
+
+DECLARE @TABLE			NVARCHAR(MAX) = 'T_CR-EL_包装_30309'
+DECLARE @BRAND			NVARCHAR(MAX) = 'FT-4000T'
+DECLARE @LOT_NUMBER		NVARCHAR(MAX) = '0550'
+DECLARE @SQL_Query1		NVARCHAR(MAX) = NULL
+DECLARE @SQL_Query2		NVARCHAR(MAX) = NULL
+DECLARE @i				NVARCHAR(MAX) = NULL
+
+
+SET @SQL_Query1 = 'SELECT @OUT = COUNT(*) FROM [' + @TABLE + '] WHERE [銘柄] = @BRANDINPUT AND [ロットNO] = @LOT_NUMBERINPUT'
+SET @SQL_Query2 = '@BRANDINPUT NVARCHAR(MAX), @LOT_NUMBERINPUT NVARCHAR(MAX), @OUT NVARCHAR(MAX) OUTPUT'
+
+
+PRINT @TABLE + @BRAND + @LOT_NUMBER
+
+EXECUTE SP_EXECUTESQL
+	@SQL_Query1							-->実行するSQL
+  , @SQL_Query2							-->内部で使う変数の定義(外部へ渡す場合はOUTPUTをつける)
+  , @BRANDINPUT = @BRAND				-->内部変数への代入式(入力)
+  , @LOT_NUMBERINPUT = @LOT_NUMBER		-->内部変数への代入式(入力)
+  , @OUT = @i OUTPUT					-->外部変数への代入式(出力)
+
+
+PRINT @SQL_Query1
+PRINT @SQL_Query2
+PRINT @i

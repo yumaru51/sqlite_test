@@ -1,0 +1,27 @@
+表示
+SCHTASKS /Query /S system /U y-kawauchi /P password
+
+
+
+
+変更
+SCHTASKS /Change /TN 変更管理ツール件数通知 /TR '"C:\Windows\SysWOW64\wscript.exe"''"C:\Program Files (x86)\作業件数通知\変更管理作業件数通知.vbs"' /RU Users
+→タスクスケジューラ「"」はずれるので'で囲う
+
+
+
+/enable 無効化
+/disable 有効化
+例　SCHTASKS /Change /TN 変更管理ツール件数通知 /RU Users /enable
+
+
+
+
+
+ヘルプ
+SCHTASKS /?で使い方
+
+
+
+
+

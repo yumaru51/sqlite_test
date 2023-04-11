@@ -1,0 +1,5 @@
+
+・プロパティを表示(例としてコピー)
+copy /?
+・コピー(コピーするフォルダで実行)
+copy java.exe C:\Users\app_admin\Desktop /B

@@ -1,0 +1,26 @@
+
+【サービス起動停止】
+net start "サービス表示名"
+net stop "サービス表示名"
+sc start サービス名
+sc stop サービス名
+
+
+【ステータス確認】
+sc query サービス名
+net help services
+
+
+サービス名：MSSQL$SQLEXPRESS
+サービス表示名："SQL Server (SQLEXPRESS)"
+
+
+
+【for】
+for /l %i in (1,1,5) do echo %i
+
+【if】
+set SERVICE_NAME=PISqlDas
+echo %SERVICE_NAME%
+sc query %SERVICE_NAME%
+if %SERVICE_NAME% == PISqlDas echo OK

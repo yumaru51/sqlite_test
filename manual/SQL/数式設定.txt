@@ -1,0 +1,13 @@
+SQLServerManagementStudio ある程度正規化された項目に対して加工
+　文字挿入、部分切り取り、
+
+sort
+case when charindex('-',[分析項目/試料名])=(2) AND (charindex('(',[分析項目/試料名])=(4) OR charindex('''',[分析項目/試料名])=(4)) then (substring([分析項目/試料名],(0),(3))+'0')+substring([分析項目/試料名],(3),len([分析項目/試料名])-(2)) else [分析項目/試料名] end
+sort1
+substring([分析項目/試料名],(0),(2))
+sort2
+case when charindex('-',[分析項目/試料名])=(2) AND (charindex('(',[分析項目/試料名])=(4) OR charindex('''',[分析項目/試料名])=(4)) then '0'+substring([分析項目/試料名],(3),(1)) else substring([分析項目/試料名],(3),(2)) end
+sort2×
+SUBSTRING([分析項目/試料名], (CHARINDEX('-', [分析項目/試料名]) + 1), CHARINDEX('(', [分析項目/試料名]) - (CHARINDEX('-',[分析項目/試料名]) + 1))
+sort3
+substring([分析項目/試料名],charindex('(',[分析項目/試料名]),(3))
