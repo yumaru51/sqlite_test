@@ -1,0 +1,13 @@
+「SQLSERVERからsqlite3にデータ移行がしたい」。
+「テストデータ作成が手間なので、テスト環境は毎回同じポイントに戻したい」
+
+
+【EXPORT】
+settings.pyでDB参照先調整
+app/outputからデータをEXCELで出力
+　水色のエリアでapp_name選んで、app_name毎にEXPORT
+
+【IMPORT】
+settings.pyでDB参照先調整
+app/outputからデータをEXCELから入力
+　緑のエリアでapp_name選んで、ファイルごとにIMPORT

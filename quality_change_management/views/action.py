@@ -258,7 +258,7 @@ def entry_progress(request):
                     target='safety',
                     present_step=present_step,
                     defaults={'present_step': StepMaster.objects.get(step=1303),
-                              'last_step': present_step
+                              'last_step': StepMaster.objects.get(step=present_step)
                               }
                 )
             # 評価レベル3であれば「所管承認結果」(1302)へ
@@ -268,7 +268,7 @@ def entry_progress(request):
                     target='safety',
                     present_step=present_step,
                     defaults={'present_step': StepMaster.objects.get(step=1302),
-                              'last_step': present_step
+                              'last_step': StepMaster.objects.get(step=present_step)
                               }
                 )
 
@@ -280,7 +280,7 @@ def entry_progress(request):
                     target='quality',
                     present_step=present_step,
                     defaults={'present_step': StepMaster.objects.get(step=1303),
-                              'last_step': present_step
+                              'last_step': StepMaster.objects.get(step=present_step)
                               }
                 )
             # 評価レベル3であれば「所管承認結果」(1302)へ
@@ -290,7 +290,7 @@ def entry_progress(request):
                     target='quality',
                     present_step=present_step,
                     defaults={'present_step': StepMaster.objects.get(step=1302),
-                              'last_step': present_step
+                              'last_step': StepMaster.objects.get(step=present_step)
                               }
                 )
 
