@@ -237,8 +237,8 @@ def entry_progress(request):
                 request_id=request_id,
                 target='quality',
                 present_step=StepMaster.objects.get(step=1301),
-                present_division=DepartmentMaster.objects.get(department_cd='OPQC').division_cd,
-                present_department='OPQC',
+                present_division=DepartmentMaster.objects.get(department_cd='IPQC').division_cd,
+                present_department='IPQC',
                 present_operator='m-shimamura',
                 last_step=StepMaster.objects.get(step=present_step)
             )
@@ -328,8 +328,8 @@ def entry_progress(request):
                 request_id=request_id,
                 target='quality',
                 present_step=StepMaster.objects.get(step=1501),
-                present_division=DepartmentMaster.objects.get(department_cd='OPQC').division_cd,
-                present_department='OPQC',
+                present_division=DepartmentMaster.objects.get(department_cd='IPQC').division_cd,
+                present_department='IPQC',
                 present_operator='m-shimamura',
                 last_step=StepMaster.objects.get(step=present_step)
             )
