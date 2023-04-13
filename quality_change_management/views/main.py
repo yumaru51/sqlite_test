@@ -91,12 +91,12 @@ def top_page(request):
         'progress_count_dict': progress_count_dict,
         'present_step_id': '',
         'progress_dict': progress_dict,
-        'progress_form': ProgressForm(initial=dict(
-            # 部署名　空
+        'progress_form': ProgressForm,  # 次作業者情報空
+        # 'progress_form': ProgressForm(initial=dict(
             # present_department=UserAttribute.objects.filter(username=request.user).first().department,
-            next_department=UserAttribute.objects.filter(username=request.user).first().department,
-            next_user=request.user
-        )),  # 所属部門のデータは操作できるため初期は部署・ユーザーの絞り込みをしない。
+            # next_department=UserAttribute.objects.filter(username=request.user).first().department,
+            # next_user=request.user
+        # )),
     }
 
     if request.method == 'POST':
