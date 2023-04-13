@@ -75,7 +75,7 @@ class RequestForm(forms.ModelForm):
     title = forms.CharField(label='変更管理名称', widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
     outline = forms.CharField(label='変更内容概略', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 60}), required=True)
     level = forms.ChoiceField(label='継続/一過性', choices=level_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
-    treatment = forms.CharField(label='リスク低減処置', widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    treatment = forms.CharField(label='リスク低減処置', widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     safety_aspect = forms.ChoiceField(label='安全面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
     quality_aspect = forms.ChoiceField(label='品質面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
     delivery_date = forms.DateField(label='変更希望日', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=True)
