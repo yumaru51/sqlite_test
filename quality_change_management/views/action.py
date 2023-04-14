@@ -227,9 +227,9 @@ def entry_progress(request):
                 request_id=request_id,
                 target='safety',
                 present_step=StepMaster.objects.get(step=1301),
-                present_division=DepartmentMaster.objects.get(department_cd='A').division_cd,
-                present_department='A',
-                present_operator='t-akamatsu',
+                present_division=DepartmentMaster.objects.get(department_cd='KA&A').division_cd,
+                present_department='KA&A',
+                present_operator='to-ito',
                 last_step=StepMaster.objects.get(step=present_step)
             )
         if quality_aspect == 'Ⅱ' or quality_aspect == 'Ⅲ':
@@ -338,9 +338,9 @@ def entry_progress(request):
                 request_id=request_id,
                 target='safety',
                 present_step=StepMaster.objects.get(step=1501),
-                present_division=DepartmentMaster.objects.get(department_cd='A').division_cd,
-                present_department='A',
-                present_operator='t-akamatsu',
+                present_division=DepartmentMaster.objects.get(department_cd='KA&A').division_cd,
+                present_department='KA&A',
+                present_operator='to-ito',
                 last_step=StepMaster.objects.get(step=present_step)
             )
 
@@ -351,9 +351,9 @@ def entry_progress(request):
                 target='safety',
                 present_step=present_step,
                 defaults={'present_step': StepMaster.objects.get(step=1501),
-                          'present_division': DepartmentMaster.objects.get(department_cd='A').division_cd,
-                          'present_department': 'A',
-                          'present_operator': 't-akamatsu',
+                          'present_division': DepartmentMaster.objects.get(department_cd='KA&A').division_cd,
+                          'present_department': 'KA&A',
+                          'present_operator': 'to-ito',
                           'last_step': StepMaster.objects.get(step=present_step)
                           }
             )
