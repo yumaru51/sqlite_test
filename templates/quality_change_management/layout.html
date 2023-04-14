@@ -17,6 +17,24 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+    .select2-container .select2-selection--single {
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5;
+        color: #495057;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: calc(1.5em + .75rem + 2px);
+    }
+    </style>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- Favicons -->
     <link rel="icon" href="{% static 'img/favicon.ico' %}">
 
@@ -78,6 +96,15 @@
     var csrf_token = '{{ csrf_token }}';
 </script>
 <script src="{% static 'js/quality_change_management.js' %}"></script>
+
+<!-- Select2 JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select2を有効化する
+        $('.select2').select2();
+    });
+</script>
+
 
 </main>
 </body>

@@ -256,7 +256,7 @@ class ProgressForm(forms.Form):
     safety_aspect = forms.ChoiceField(label='安全面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     quality_aspect = forms.ChoiceField(label='品質面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     # next_department = forms.ChoiceField(label='次作業者部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select', 'onchange': 'change_user(this.value);'}), initial='', required=False)
-    next_department = forms.ChoiceField(label='次作業者部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    next_department = forms.ChoiceField(label='次作業者部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select select2'}), initial='', required=False)
     next_user = forms.ChoiceField(label='次作業者', choices=user_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     display_class = forms.MultipleChoiceField(label='　', choices=display_class, widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline_display_class'}), required=False)
 
