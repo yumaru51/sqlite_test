@@ -294,7 +294,8 @@ def entry_progress(request):
                               }
                 )
 
-        if Progress.objects.filter(request_id=request_id, present_step=1301).exists() is False:
+        if Progress.objects.filter(request_id=request_id, present_step=1301).exists() is False and \
+                Progress.objects.filter(request_id=request_id, present_step=1302).exists() is False:
             Progress.objects.update_or_create(
                 request_id=request_id,
                 target='request',
@@ -369,7 +370,8 @@ def entry_progress(request):
                       'last_step': StepMaster.objects.get(step=1302)
                       }
         )
-        if Progress.objects.filter(request_id=request_id, present_step=1302).exists() is False:
+        if Progress.objects.filter(request_id=request_id, present_step=1301).exists() is False and \
+                Progress.objects.filter(request_id=request_id, present_step=1302).exists() is False:
             Progress.objects.update_or_create(
                 request_id=request_id,
                 target='request',
