@@ -296,7 +296,9 @@ def detail(request, present_step, target, request_id):
         for department in department_list:
             if department_cd_list == department:
                 authority_flag = 1
-    # ③ユーザー制御
+                # ③ユーザー制御
+                # if UserAttribute.objects.filter(username=request.user, authority__gte=300, lost_flag=0).exists():
+                #     authority_flag = 1
 
     params = {
         'step_name': step_name,
