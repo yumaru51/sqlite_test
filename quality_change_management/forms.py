@@ -14,12 +14,9 @@ for division_master in DivisionMaster.objects.filter(lost_flag=0).values_list('d
 department_list = [('', '')]
 for department_master in DepartmentMaster.objects.filter(lost_flag=0).values_list('department_cd', 'department_name'):
     department_list.append(department_master)
-test_list = []
 user_list = [('', '')]
 for user_master in User.objects.filter(lost_flag=0, first_name__isnull=False).values_list('username', 'last_name', 'first_name'):
-    test_list = (user_master[0], user_master[1] + '　' + user_master[2])
-    user_list.append(test_list)
-    test_list = []
+    user_list.append((user_master[0], user_master[1] + '　' + user_master[2]))
 
 change_target_list = [
     ('method', '方法'),
