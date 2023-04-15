@@ -9,15 +9,14 @@ import mimetypes
 import glob
 import openpyxl
 from django.db.models import Q
-from quality_change_management.models import TargetMaster, StepMaster, StepDisplayPage, StepChargeDepartment, StepRelation, ActionMaster, StepAction, \
-    Log, Request, Quality, Safety, Progress
-from fms.models import DivisionMaster, DepartmentMaster, User, UserAttribute
-from quality_change_management.forms import RequestForm, LogForm, ProgressForm, ReportForm
+from quality_change_management.models import StepMaster, StepDisplayPage, StepAction, \
+    Request, Progress
+from fms.models import DepartmentMaster, User, UserAttribute
+from quality_change_management.forms import ProgressForm, ReportForm
 from .info import info_change, info_history, info_comment
 from .sub import department_lists
 
 
-# test
 # top_page　progressの情報をリストする
 def top_page(request):
     print(datetime.datetime.now(),

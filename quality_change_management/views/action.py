@@ -4,15 +4,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 import datetime
-from quality_change_management.models import TargetMaster, StepMaster, StepDisplayPage, StepChargeDepartment, StepRelation, ActionMaster, StepAction, \
+from quality_change_management.models import StepMaster, StepRelation, ActionMaster, \
     Log, Request, Quality, Safety, Progress
-from fms.models import DivisionMaster, DepartmentMaster, User, UserAttribute
-from quality_change_management.forms import RequestForm, Request2Form, Request3Form, QualityForm, SafetyForm, Quality2Form, Safety2Form, LogForm
+from fms.models import DepartmentMaster, UserAttribute
+from quality_change_management.forms import RequestForm, Request2Form, Request3Form, QualityForm, SafetyForm
 import os
 import inspect
 import logging
 import traceback
-import sys
 
 
 # 例外ログ出力
@@ -454,7 +453,6 @@ def function_approval(request):
 # 入力完了処理
 def function_completed(request):
     print('入力完了します')
-    # function_name = request.session['action']
     function_name = 'entry_' + request.session['target']
     globals()[function_name](request)
     entry_progress(request)
@@ -600,12 +598,6 @@ def function_remand(request):
                   }
     )
     return
-
-
-# 中止処理 却下と同機能のため無くす
-# def function_stop(request):
-#     print('中止します')
-#     return
 
 
 # 機能検証用

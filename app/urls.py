@@ -6,7 +6,6 @@ app_name = 'app'
 urlpatterns = [
     path('output/', views.output_test, name='output_test'),
     path('delete/', views.delete_test, name='delete_test'),
-    path('excel_import/', views.excel_import, name='excel_import'),
     path('import_data/', views.import_data, name='import_data'),
     path('export_data/', views.export_data, name='export_data'),
     path('test_function/', views.test_function, name='test_function'),

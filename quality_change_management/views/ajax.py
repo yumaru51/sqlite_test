@@ -6,14 +6,9 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 import datetime
 import os
-import mimetypes
-import glob
-import openpyxl
 from socket import gethostname
-from quality_change_management.models import TargetMaster, StepMaster, StepDisplayPage, StepChargeDepartment, StepRelation, ActionMaster, StepAction, \
-    Log, Request, Progress
-from fms.models import DivisionMaster, DepartmentMaster, User, UserAttribute
-from quality_change_management.forms import RequestForm, LogForm
+from quality_change_management.models import StepRelation, Request
+from fms.models import DepartmentMaster, User, UserAttribute
 from .sub import department_lists
 
 
@@ -112,7 +107,6 @@ def ajax_department(request):
 
 # 部署変更時のユーザーリスト絞り込み処理
 def ajax_user(request):
-    # request_id = request.session['request_id']
     request_id = request.session.get('request_id')
     data = ''
 
@@ -181,13 +175,11 @@ def ajax_file_upload(request):
     ary = {
         'msg': msg,
     }
-    # return JsonResponse(ary)
     return redirect('quality_change_management:detail', present_step, target, request_id)
 
 
 # 添付ファイルリスト表示処理
 def ajax_file_list(request):
-    # request_id = request.session['request_id']
     request_id = request.session.get('request_id')
     target = request.session.get('target')
     present_step = request.session.get('present_step')
@@ -210,7 +202,6 @@ def ajax_file_list(request):
     # 存在チェック　なければフォルダ作成
     if os.path.exists(path) is True:
         files_file = os.listdir(path)
-        # files_file = [f for f in files if os.path.isfile(os.path.join(path, f))]
 
         # html言語生成
         html = '<h3>ファイル一覧</h3>'
@@ -230,13 +221,11 @@ def ajax_file_list(request):
     ary = {
         'html': html,
     }
-
     return JsonResponse(ary)
 
 
 # 添付ファイルダウンロード処理
 def ajax_file_download(request, data_id, file_name):
-
     # ベースディレクトリ
     if gethostname() == 'YWEBSERV1':  # 本番
         base_dir = '\\\\Ydomnserv\\common\\部門間フォルダ\\FacilityData\\Production\\quality_change_management\\'
@@ -254,12 +243,10 @@ def ajax_file_download(request, data_id, file_name):
 
 
 # 添付ファイル削除処理
-# def ajax_file_delete(request):
 def ajax_file_delete(request, file_name):
     request_id = request.session.get('request_id')
     target = request.session.get('target')
     present_step = request.session.get('present_step')
-    # file_name = request.POST['file_name']
 
     # ベースディレクトリ
     if gethostname() == 'YWEBSERV1':  # 本番
@@ -278,6 +265,5 @@ def ajax_file_delete(request, file_name):
     ary = {
         'msg': 'データを削除しました',
     }
-    # return JsonResponse(ary)
     return redirect('quality_change_management:detail', present_step, target, request_id)
 

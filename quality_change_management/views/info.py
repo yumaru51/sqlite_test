@@ -1,14 +1,11 @@
-# ログインユーザーを使用するmoduleをインポート
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.http import require_POST
+from django.shortcuts import render
 import datetime
 import json
-from quality_change_management.models import TargetMaster, StepMaster, StepPageEntryMaster, StepDisplayPage, StepChargeDepartment, StepRelation, ActionMaster, StepAction, \
+from quality_change_management.models import StepMaster, StepPageEntryMaster, \
     Log, Request, Quality, Safety, Progress
-from fms.models import DivisionMaster, DepartmentMaster, User, UserAttribute
-from quality_change_management.forms import RequestForm, Request2Form, Request3Form, QualityForm, SafetyForm, Quality2Form, Safety2Form, LogForm, TestForm
+from fms.models import UserAttribute
+from quality_change_management.forms import RequestForm, Request2Form, Request3Form, QualityForm, SafetyForm, \
+    Quality2Form, Safety2Form, LogForm, TestForm
 from .ajax import ajax_file_list
 from .sub import department_lists
 
@@ -100,40 +97,18 @@ def info_change(request):
 
 
 def info_history(request):
-    request_id = request.session['request_id']
-    present_step = request.session['present_step']
-
-    step_list = StepMaster.objects.filter(hidden_flag=0)
-
-    if request_id == 0:     # 新規のとき
-        request_list = ''
-
-    else:                   # 既存のとき
-        request_list = Request.objects.get(id=request_id)
-
     params = {
-        'request_list': request_list,
-        'present_step': present_step,
-        'step_list': step_list,
+        'present_step': request.session['present_step'],
+        'step_list': StepMaster.objects.filter(hidden_flag=0),
     }
     return render(request, 'quality_change_management/history.html', params)
 
 
 def info_comment(request):
     request_id = request.session['request_id']
-    present_step = request.session['present_step']
-
-    if request_id == 0:     # 新規のとき
-        request_list = ''
-        log_list = ''
-
-    else:                   # 既存のとき
-        request_list = Request.objects.get(id=request_id)
-        log_list = Log.objects.filter(target='request', target_table_id=request_id).order_by('-operation_datetime')
 
     params = {
-        'request_list': request_list,
-        'log_list': log_list,
+        'log_list': Log.objects.filter(target='request', target_table_id=request_id).order_by('-operation_datetime'),
     }
     return render(request, 'quality_change_management/comment.html', params)
 

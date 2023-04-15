@@ -1,14 +1,5 @@
-# ログインユーザーを使用するmoduleをインポート
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.http import require_POST
-import datetime
-from django.db.models import Q
-from quality_change_management.models import TargetMaster, StepMaster, StepDisplayPage, StepChargeDepartment, StepRelation, ActionMaster, StepAction, \
-    Log, Request, Progress
-from fms.models import DivisionMaster, DepartmentMaster, User, UserAttribute
-from quality_change_management.forms import RequestForm, ProgressForm, LogForm
+from quality_change_management.models import StepChargeDepartment, Request
+from fms.models import UserAttribute
 
 
 # 担当部署制御　原課部署(Original)対応のため、部署コードリストを再取得する共通関数
