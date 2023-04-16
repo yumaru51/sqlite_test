@@ -78,6 +78,7 @@ function user(id_department, id_user){
         type: "POST",
         data: {
             'department': $('#' + id_department).val(),
+            'user': $('#' + id_user).val(),
             'csrfmiddlewaretoken': csrf_token
         },
         timeout: 10000,

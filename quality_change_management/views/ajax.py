@@ -110,8 +110,15 @@ def ajax_user(request):
     request_id = request.session.get('request_id')
     data = ''
 
+    if request.POST.get('user') is not '':
+        for user_attribute_list in UserAttribute.objects.filter(department=request.POST['department']):
+            if user_attribute_list.username == str(request.POST['user']):
+                data = data + '<option value="' + str(user_attribute_list.username) + '" selected>' + str(User.objects.get(username=user_attribute_list.username)) + '</option>'
+            else:
+                data = data + '<option value="' + str(user_attribute_list.username) + '">' + str(User.objects.get(username=user_attribute_list.username)) + '</option>'
+
     # 新規データ初期値 ログイン情報より初期値選択
-    if request_id == 0 or request_id is None:
+    elif request_id == 0 or request_id is None:
         for user_attribute_list in UserAttribute.objects.filter(department=request.POST['department']):
             if user_attribute_list.username == str(request.user):
                 data = data + '<option value="' + str(user_attribute_list.username) + '" selected>' + str(User.objects.get(username=user_attribute_list.username)) + '</option>'
@@ -119,7 +126,7 @@ def ajax_user(request):
                 data = data + '<option value="' + str(user_attribute_list.username) + '">' + str(User.objects.get(username=user_attribute_list.username)) + '</option>'
 
     # 既存データ初期値 登録データより初期値選択
-    else:
+    elif request_id > 0:
         for user_attribute_list in UserAttribute.objects.filter(department=request.POST['department']):
             if user_attribute_list.username == Request.objects.get(id=request_id).user:
                 data = data + '<option value="' + str(user_attribute_list.username) + '" selected>' + str(User.objects.get(username=user_attribute_list.username)) + '</option>'
