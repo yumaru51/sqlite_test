@@ -186,12 +186,9 @@ def entry_progress(request):
         # ②「工務部長承認」(1201)に行く
         else:
             next_step = StepMaster.objects.get(step=1201)
-            # present_division = 'KOUMU'
-            # present_department = 'KOUMU'
-            # present_operator = 't-hujii'
-            present_division = StepChargeDepartment.objects.get(step=1201).charge_department
-            present_department = StepChargeDepartment.objects.get(step=1201).charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302).username
+            present_division = StepChargeDepartment.objects.get(step=1201, lost_flag=0).charge_department
+            present_department = StepChargeDepartment.objects.get(step=1201, lost_flag=0).charge_department
+            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
 
         Progress.objects.update_or_create(
             request_id=request_id,
@@ -225,9 +222,9 @@ def entry_progress(request):
 
         # 安全と品質1個ずつ確認して2,3であれば専用プログレス作成
         if safety_aspect == 'Ⅱ' or safety_aspect == 'Ⅲ':
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A').charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A').charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302).username
+            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
             Progress.objects.create(
                 request_id=request_id,
                 target='safety',
@@ -238,8 +235,8 @@ def entry_progress(request):
                 last_step=StepMaster.objects.get(step=present_step)
             )
         if quality_aspect == 'Ⅱ' or quality_aspect == 'Ⅲ':
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC').charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC').charge_department
+            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC', lost_flag=0).charge_department
+            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC', lost_flag=0).charge_department
             present_operator = UserAttribute.objects.get(department=present_department, authority=302).username
             Progress.objects.create(
                 request_id=request_id,
@@ -333,9 +330,9 @@ def entry_progress(request):
 
         # 品質評価レベルが2,3の場合は品質プログレス作成。それ以外は安全プログレス作成。
         if quality_aspect == 'Ⅱ' or quality_aspect == 'Ⅲ':
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC').charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC').charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302).username
+            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC', lost_flag=0).charge_department
+            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='IPQC', lost_flag=0).charge_department
+            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
             Progress.objects.create(
                 request_id=request_id,
                 target='quality',
@@ -346,9 +343,9 @@ def entry_progress(request):
                 last_step=StepMaster.objects.get(step=present_step)
             )
         else:
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A').charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A').charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302).username
+            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
             Progress.objects.create(
                 request_id=request_id,
                 target='safety',
@@ -361,9 +358,9 @@ def entry_progress(request):
 
         # ただし安全評価レベルが2,3なら安全プログレスも作成。
         if safety_aspect == 'Ⅱ' or safety_aspect == 'Ⅲ':
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A').charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A').charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302).username
+            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
             Progress.objects.update_or_create(
                 request_id=request_id,
                 target='safety',

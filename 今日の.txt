@@ -22,5 +22,4 @@ step_actionにauthorityを持たせて、ボタンごとに表示チェックを
 ⑦http://yintrasrv/gyomukanri/変更管理レベル分表.xlsx　えぐい
 　共有フォルダか、サーバーフォルダ
 
-
-
+⑧lost_flag=0がないとこ多すぎてやばいかも！
