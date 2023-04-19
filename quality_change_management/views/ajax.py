@@ -244,7 +244,7 @@ def ajax_file_download(request, data_id, file_name):
     file_full_path = base_dir + data_id + "\\" + file_name
 
     if os.path.isfile(file_full_path) is False:
-        msg = '対象ファイルが存在しません！！'
+        return HttpResponse("<h1>対象ファイルが存在しません！</h1>")
 
     return FileResponse(open(file_full_path, "rb"), as_attachment=True, filename=file_name)
 
