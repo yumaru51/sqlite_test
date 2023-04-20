@@ -143,7 +143,7 @@ def top_page(request):
         # 条件⑤:変更日FROM～TO
         request_id_list = []
         if request.POST['delivery_date_from'] is not '' and request.POST['delivery_date_to'] is not '':
-            for request_id in Request.objects.filter(completion_date__range=(request.POST['delivery_date_from'], request.POST['delivery_date_to'])).values_list('id'):
+            for request_id in Request.objects.filter(delivery_date__range=(request.POST['delivery_date_from'], request.POST['delivery_date_to'])).values_list('id'):
                 request_id_list.append(request_id)
                 condition5['request_id__in'] = request_id_list
             if request_id_list.__len__() == 0:
