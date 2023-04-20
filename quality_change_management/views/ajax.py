@@ -1,5 +1,6 @@
 # ログインユーザーを使用するmoduleをインポート
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import get_object_or_404
@@ -156,9 +157,9 @@ def ajax_file_upload(request):
 
     # ファイルが1件もない、または新規画面の時　アップロード不可
     if request.FILES.__len__() == 0:
-        msg = "ファイルが選択されていません！"
+        return HttpResponse("<script>alert('ファイルが選択されていません！！');window.history.back();</script>")
     elif request_id == 0:
-        msg = "一時保存を行ってからファイルを添付してください！"
+        return HttpResponse("<script>alert('一時保存を行ってからファイルを添付してください！！');window.history.back();</script>")
     else:
         # ファイルアップロードフォームが複数ある場合1ファイルずつ処理を行う。
         for file_list in request.FILES.dict():
@@ -177,11 +178,6 @@ def ajax_file_upload(request):
                     for chunk in file.chunks():
                         f.write(chunk)
 
-        msg = "アップロード完了！！"
-
-    ary = {
-        'msg': msg,
-    }
     return redirect('quality_change_management:detail', present_step, target, request_id)
 
 
@@ -217,7 +213,7 @@ def ajax_file_list(request):
                 html = html + '<div class="row">'
                 html = html + '<div class="col-5">' + file + '</div>'
                 # html = html + '<div class="col-2"><button type="button" onclick="file_download(\'' + str(request_id) + '\', \'' + file + '\');" class="btn btn-primary mt-2"> 取出 </button></div>'
-                html = html + '<div class="col-2"><a href="../../../../ajax_file_list/' + str(request_id) + '/' + file + '/" class="btn btn-primary mt-2"> 取出 </a></div>'
+                html = html + '<div class="col-2"><a href="../../../../ajax_file_download/' + str(request_id) + '/' + file + '/" class="btn btn-primary mt-2"> 取出 </a></div>'
                 if delete_flag == 1:
                     # html = html + '<div class="col-2"><button type="button" onclick="file_delete(\'' + file + '\');" class="btn btn-primary mt-2"> 削除 </button></div>'
                     html = html + '<div class="col-2"><a href="../../../../ajax_file_delete/' + file + '/" class="btn btn-primary mt-2"> 削除 </a></div>'
@@ -250,7 +246,7 @@ def ajax_file_download(request, data_id, file_name):
 
 
 # 添付ファイル削除処理
-def ajax_file_delete(request, file_name):
+def ajax_file_delete(request, data_id, file_name):
     request_id = request.session.get('request_id')
     target = request.session.get('target')
     present_step = request.session.get('present_step')
@@ -263,7 +259,7 @@ def ajax_file_delete(request, file_name):
     else:
         base_dir = '\\\\Ydomnserv\\common\\部門間フォルダ\\FacilityData\\test\\quality_change_management\\'
 
-    file_full_path = base_dir + str(request_id) + "\\" + file_name
+    file_full_path = base_dir + data_id + "\\" + file_name
 
     # ファイル削除、レコード削除
     if os.path.isfile(file_full_path) is True:

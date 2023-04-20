@@ -84,10 +84,12 @@
     var ajax_next_step = '{% url 'quality_change_management:ajax_next_step' %}';
     var ajax_department = '{% url 'quality_change_management:ajax_department' %}';
     var ajax_user = '{% url 'quality_change_management:ajax_user' %}';
-    var ajax_file_upload = '{% url 'quality_change_management:ajax_file_upload' %}';
     var ajax_file_list = '{% url 'quality_change_management:ajax_file_list' %}';
-    {% comment %}var ajax_file_delete = '{% url 'quality_change_management:ajax_file_delete' %}';{% endcomment %}
     var csrf_token = '{{ csrf_token }}';
+    {% comment %}
+    var ajax_file_upload = '{% url 'quality_change_management:ajax_file_upload' %}';
+    var ajax_file_delete = '{% url 'quality_change_management:ajax_file_delete' %}';
+    {% endcomment %}
 </script>
 <script src="{% static 'js/quality_change_management.js' %}"></script>
 

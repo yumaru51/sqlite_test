@@ -1,4 +1,4 @@
-s
+
 【GitHub】
 ①
 yumaru51@yahoo.co.jp
@@ -34,7 +34,8 @@ C:\python_tool_development\isk-tools
 "cmd.exe" /k ""C:\python_tool_development\isk-tools\Scripts\activate.bat""
 
 【ターミナルコマンド】
-pstadjango.get_version()
+python -m django --version
+django.get_version()
 
 django-admin startproject config(フォルダが2重にできる)
 django-admin startproject config .(フォルダを1つに、同階層にmanage.py)
@@ -49,6 +50,15 @@ python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate --database=quality_change_management
 python manage.py createsuperuser
+
+【マイグレーション】
+①リセットしたい場合は、各appsフォルダのmigrationsフォルダの__pycache__と__init__.py以外を削除
+②マイグレーション時に、runserverで起動確認されるため、実行エラーとなる。
+③urls.pyで各appsへのurlをコメントアウトして、実行エラーとならないようにする。
+④マイグレートはデータベース毎にしないといけない。(アプリケーション毎とごっちゃにならないように)
+
+【static】
+python manage.py collectstatic
 
 【ライブラリ一括DL】
 プロジェクトフォルダ内の「requirements.txt」に記入しておくとpycharmが読み込んでインストールするか聞いてくれる。

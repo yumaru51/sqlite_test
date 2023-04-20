@@ -19,7 +19,7 @@ urlpatterns = [
     path('ajax_user/', ajax.ajax_user, name='ajax_user'),
     path('ajax_file_upload/', ajax.ajax_file_upload, name='ajax_file_upload'),
     path('ajax_file_list/', ajax.ajax_file_list, name='ajax_file_list'),
-    path('ajax_file_list/<data_id>/<file_name>/', ajax.ajax_file_download, name='ajax_file_download'),
+    path('ajax_file_download/<data_id>/<file_name>/', ajax.ajax_file_download, name='ajax_file_download'),
     # path('ajax_file_delete/', ajax.ajax_file_delete, name='ajax_file_delete'),
-    path('ajax_file_delete/<file_name>/', ajax.ajax_file_delete, name='ajax_file_delete'),
+    path('ajax_file_delete/<data_id>/<file_name>/', ajax.ajax_file_delete, name='ajax_file_delete'),
 ]

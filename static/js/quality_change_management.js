@@ -4,10 +4,10 @@
     var ajax_next_step = '{% url 'ajax_next_step' %}';
     var ajax_department = '{% url 'ajax_department' %}';
     var ajax_user = '{% url 'ajax_user' %}';
-    var ajax_file_upload = '{% url 'quality_change_management:ajax_file_upload' %}';
     var ajax_file_list = '{% url 'quality_change_management:ajax_file_list' %}';
-    var ajax_file_delete = '{% url 'quality_change_management:ajax_file_delete' %}';
     var csrf_token = '{% csrf_token %}';
+    var ajax_file_upload = '{% url 'quality_change_management:ajax_file_upload' %}';
+    var ajax_file_delete = '{% url 'quality_change_management:ajax_file_delete' %}';
 
 *************************************************************************************************************************************************************************************/
 
@@ -97,43 +97,43 @@ function user(id_department, id_user){
 
 
 //添付ファイルアップロード処理
-function file_upload(form_id){
-    form_id = '#' + form_id
-    var form_data = new FormData($(form_id).get(0));
-
-    //file_budget_idが無効、もしくはtargetに指定された側のidが無効の場合はアップロード停止
-    if( (form_data.get('file_budget_id') == 0) || (form_data.get('file_target') == 'work' && form_data.get('file_work_id') == 0) ){
-        alert('ID未指定のためファイルをアップロードできません、先に保存してください');
-        // アクションボタン有効化
-        $(".button").prop("disabled", false);
-        cancelFlag = false;
-        return;
-    }
-
-    // POSTでアップロード
-    $.ajax({
-        url         : ajax_file_upload,
-        type        : "POST",
-        data        : form_data,
-        cache       : false,
-        contentType : false,
-        processData : false,
-        dataType    : "json"
-    })
-    .done(function(data){
-        alert(data.msg);
-        console.log('file_upload')
-        file_list();
-    })
-    .fail(function(jqXHR,textStatus,errorThrown){
-        alert('Error!' +textStatus+' ' +errorThrown);
-    });
-    setTimeout(function () {
-        // アクションボタン有効化
-        $(".button").prop("disabled", false);
-        cancelFlag = false;
-    }, 2000);
-}
+//function file_upload(form_id){
+//    form_id = '#' + form_id
+//    var form_data = new FormData($(form_id).get(0));
+//
+//    //file_budget_idが無効、もしくはtargetに指定された側のidが無効の場合はアップロード停止
+//    if( (form_data.get('file_budget_id') == 0) || (form_data.get('file_target') == 'work' && form_data.get('file_work_id') == 0) ){
+//        alert('ID未指定のためファイルをアップロードできません、先に保存してください');
+//        // アクションボタン有効化
+//        $(".button").prop("disabled", false);
+//        cancelFlag = false;
+//        return;
+//    }
+//
+//    // POSTでアップロード
+//    $.ajax({
+//        url         : ajax_file_upload,
+//        type        : "POST",
+//        data        : form_data,
+//        cache       : false,
+//        contentType : false,
+//        processData : false,
+//        dataType    : "json"
+//    })
+//    .done(function(data){
+//        alert(data.msg);
+//        console.log('file_upload')
+//        file_list();
+//    })
+//    .fail(function(jqXHR,textStatus,errorThrown){
+//        alert('Error!' +textStatus+' ' +errorThrown);
+//    });
+//    setTimeout(function () {
+//        // アクションボタン有効化
+//        $(".button").prop("disabled", false);
+//        cancelFlag = false;
+//    }, 2000);
+//}
 
 
 //添付ファイルリスト表示処理
@@ -160,37 +160,37 @@ function file_list() {
 
 
 //添付ファイルダウンロード処理
-function file_download(data_id, file_name){
-    var link_str = ajax_file_list + data_id + "/" + file_name + "/";
-    var downLoadLink = document.createElement("a");
-    downLoadLink.download = file_name;
-    downLoadLink.href = link_str ;
-    downLoadLink.click();
-}
+//function file_download(data_id, file_name){
+//    var link_str = ajax_file_list + data_id + "/" + file_name + "/";
+//    var downLoadLink = document.createElement("a");
+//    downLoadLink.download = file_name;
+//    downLoadLink.href = link_str ;
+//    downLoadLink.click();
+//}
 
 
 //添付ファイル削除処理
-function file_delete(file_name){
-    $.ajax({
-        url         : ajax_file_delete,
-        type        : "POST",
-        data        : {
-            'file_name' : file_name,
-            'csrfmiddlewaretoken': csrf_token
-        },
-        timeout     : 10000,
-        dataType    : 'json',
-        cache       : false,
-    })
-    .done(function(data){
-        alert(data.msg);
-        console.log('file_delete')
-        file_list();
-    })
-   .fail(function(jqXHR,textStatus,errorThrown){
-        alert('Error!' +textStatus+' ' +errorThrown);
-    });
-}
+//function file_delete(file_name){
+//    $.ajax({
+//        url         : ajax_file_delete,
+//        type        : "POST",
+//        data        : {
+//            'file_name' : file_name,
+//            'csrfmiddlewaretoken': csrf_token
+//        },
+//        timeout     : 10000,
+//        dataType    : 'json',
+//        cache       : false,
+//    })
+//    .done(function(data){
+//        alert(data.msg);
+//        console.log('file_delete')
+//        file_list();
+//    })
+//   .fail(function(jqXHR,textStatus,errorThrown){
+//        alert('Error!' +textStatus+' ' +errorThrown);
+//    });
+//}
 
 
 //レベル判定表ダウンロード処理
