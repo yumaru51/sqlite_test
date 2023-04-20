@@ -216,7 +216,7 @@ def ajax_file_list(request):
                 html = html + '<div class="col-2"><a href="../../../../ajax_file_download/' + str(request_id) + '/' + file + '/" class="btn btn-primary mt-2"> 取出 </a></div>'
                 if delete_flag == 1:
                     # html = html + '<div class="col-2"><button type="button" onclick="file_delete(\'' + file + '\');" class="btn btn-primary mt-2"> 削除 </button></div>'
-                    html = html + '<div class="col-2"><a href="../../../../ajax_file_delete/' + file + '/" class="btn btn-primary mt-2"> 削除 </a></div>'
+                    html = html + '<div class="col-2"><a href="../../../../ajax_file_delete/' + str(request_id) + '/' + file + '/" class="btn btn-primary mt-2"> 削除 </a></div>'
                 html = html + '</div>'
         else:
             html = html + '保存添付ファイル無し'

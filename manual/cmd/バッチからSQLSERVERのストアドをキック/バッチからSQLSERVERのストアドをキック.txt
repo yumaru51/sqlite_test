@@ -1,0 +1,15 @@
+バッチからSQLSERVERのストアドをキック
+
+【SQLSERVER認証】
+sqlcmd -S YDRSUM2 -U sa -P iskisk6117 -i D:\ファイル名.sql
+
+【統合認証】
+sqlcmd -S YDRSUM2 -E -i D:\チタン採番処理\BAT\採番処理.sql
+
+
+-S：接続するSQL Serverインスタンス名
+-U：接続する際に使用するユーザー名
+-P：接続する際に使用するパスワード
+-i：実行するSQLスクリプトファイルのパス
+-E：統合認証（Windows認証）接続
+
