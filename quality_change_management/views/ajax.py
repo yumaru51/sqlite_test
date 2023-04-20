@@ -1,6 +1,5 @@
 # ログインユーザーを使用するmoduleをインポート
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import get_object_or_404
@@ -240,7 +239,7 @@ def ajax_file_download(request, data_id, file_name):
     file_full_path = base_dir + data_id + "\\" + file_name
 
     if os.path.isfile(file_full_path) is False:
-        return HttpResponse("<h1>対象ファイルが存在しません！</h1>")
+        return HttpResponse("<script>alert('対象ファイルが存在しません！！');</script>")
 
     return FileResponse(open(file_full_path, "rb"), as_attachment=True, filename=file_name)
 
