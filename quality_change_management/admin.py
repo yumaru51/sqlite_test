@@ -31,9 +31,9 @@ admin.site.register(ActionMaster, ActionMasterAdmin)
 
 
 class StepMasterAdmin(admin.ModelAdmin):
-    list_display = ('step', 'step_name', 'hidden_flag', 'lost_flag')
-    list_filter = ['step', 'step_name', 'hidden_flag', 'lost_flag']
-    search_fields = ['step', 'step_name', 'hidden_flag', 'lost_flag']
+    list_display = ('step', 'step_name', 'authority', 'hidden_flag', 'lost_flag')
+    list_filter = ['step', 'step_name', 'authority', 'hidden_flag', 'lost_flag']
+    search_fields = ['step', 'step_name', 'authority', 'hidden_flag', 'lost_flag']
 
 
 admin.site.register(StepMaster, StepMasterAdmin)

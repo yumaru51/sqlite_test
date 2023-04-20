@@ -45,6 +45,7 @@ class ActionMaster(models.Model):
 class StepMaster(models.Model):
     step = models.IntegerField('工程ID', primary_key=True)
     step_name = models.CharField('工程名', max_length=20, blank=True, null=True)
+    authority = models.IntegerField('権限', blank=True, null=True)
     hidden_flag = models.IntegerField('無効FL', blank=True, null=True)
     lost_flag = models.IntegerField('無効FL', blank=True, null=True)
 

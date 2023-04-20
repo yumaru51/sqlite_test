@@ -295,10 +295,10 @@ def detail(request, present_step, target, request_id):
     for department_cd_list in department_cd_lists:
         for department in department_list:
             if department_cd_list == department:
-                authority_flag = 1
                 # ③ユーザー制御
-                # if UserAttribute.objects.filter(username=request.user, authority__gte=300, lost_flag=0).exists():
-                #     authority_flag = 1
+                user_authority = StepMaster.objects.get(step=present_step, lost_flag=0).authority
+                if UserAttribute.objects.filter(username=request.user, authority__gte=user_authority, lost_flag=0).exists():
+                    authority_flag = 1
 
     params = {
         'step_name': step_name,
