@@ -55,7 +55,7 @@
                 {% endif %}
 
                 <!--レベル判定表-->
-                <button type="button" onclick="location.href='http://yintrasrv/gyomukanri/変更管理レベル分表.xlsx';" class="btn btn-primary mt-2">レベル判定表を開く</button><br><br>
+                <a href="{% static 'files/quality_change_management/変更管理レベル分表.xlsx' %}" download class="btn btn-primary mt-2">レベル判定表を開く</a>
 
                 <!--所管承認　専用フォーム-->
                 {% if present_step == 1301 and target == 'quality' %}

@@ -193,16 +193,6 @@ function file_list() {
 //}
 
 
-//レベル判定表ダウンロード処理
-function level_judgment_table_download(){
-    var link_str = "\\\\ydomnserv\\common\\部門間フォルダ\\FacilityData\\template_files\\quality_change_management\\変更管理レベル分表.xlsx";
-    var downLoadLink = document.createElement("a");
-    downLoadLink.download = '変更管理レベル分表.xlsx';
-    downLoadLink.href = link_str ;
-    downLoadLink.click();
-}
-
-
 //チェックボックス最低1つ以上選択させる
 $(function(){
 //    $("input[type='checkbox']").on('change', function () {

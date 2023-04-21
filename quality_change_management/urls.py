@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import include, path
-from django.conf.urls import url
 from .views import main, info, action, ajax
 
 app_name = 'quality_change_management'
