@@ -97,15 +97,15 @@ class RequestAdmin(admin.ModelAdmin):
     list_display = ('division', 'department', 'user', 'change_target', 'others', 'title', 'outline', 'level',
                     'treatment', 'safety_aspect', 'quality_aspect', 'delivery_date', 'delivery_date_start',
                     'delivery_date_end', 'level2', 'others2', 'completion_date', 'application_date',
-                    'education_management_system_id')
+                    'education_check')
     list_filter = ['division', 'department', 'user', 'change_target', 'others', 'title', 'outline', 'level',
                    'treatment', 'safety_aspect', 'quality_aspect', 'delivery_date', 'delivery_date_start',
                    'delivery_date_end', 'level2', 'others2', 'completion_date', 'application_date',
-                   'education_management_system_id']
+                   'education_check']
     search_fields = ['division', 'department', 'user', 'change_target', 'others', 'title', 'outline', 'level',
                      'treatment', 'safety_aspect', 'quality_aspect', 'delivery_date', 'delivery_date_start',
                      'delivery_date_end', 'level2', 'others2', 'completion_date', 'application_date',
-                     'education_management_system_id']
+                     'education_check']
 
 
 admin.site.register(Request, RequestAdmin)

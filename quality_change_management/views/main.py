@@ -89,7 +89,7 @@ def top_page(request):
                                                    first().department).department_name,  # 兼務の場合、一番上のをメインとして扱っている。
         'progress_count_dict': progress_count_dict,
         'present_step_id': '',
-        'progress_dict': progress_dict,
+        'progress_dict': progress_dict,  # ログインユーザーが所属している全部門、全ステップの担当データを表示
         'progress_form': ProgressForm,  # 次作業者情報空
         # 'progress_form': ProgressForm(initial=dict(
             # present_department=UserAttribute.objects.filter(username=request.user).first().department,
@@ -297,7 +297,7 @@ def detail(request, present_step, target, request_id):
             if department_cd_list == department:
                 # ③ユーザー制御
                 user_authority = StepMaster.objects.get(step=present_step, lost_flag=0).authority
-                if UserAttribute.objects.filter(username=request.user, authority__gte=user_authority, lost_flag=0).exists():
+                if UserAttribute.objects.filter(username=request.user, department=department, authority__gte=user_authority, lost_flag=0).exists():
                     authority_flag = 1
 
     params = {

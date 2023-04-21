@@ -135,18 +135,19 @@ class Request2Form(forms.ModelForm):
 
 
 class Request3Form(forms.ModelForm):
-    education_management_system_id = forms.CharField(label='教育管理システムID', widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)  # 評価確認
+    education_check = forms.BooleanField(label='周知しましたか？', widget=forms.CheckboxInput(
+        attrs={'class': 'form-check-input mx-3', 'required': 'True'}))
 
     class Meta:
         model = Request
-        fields = ['education_management_system_id', ]
+        fields = ['education_check', ]
         widgets = {}
 
     def __init__(self, edit, step, **kwargs):
         super(Request3Form, self).__init__(**kwargs)
         if edit == 'off' or step != 1601:  # editが「off」なら入力不可。
-            self.fields['education_management_system_id'].widget.attrs['style'] = 'pointer-events: none; '
-            self.fields['education_management_system_id'].widget.attrs['tabindex'] = '-1'
+            self.fields['education_check'].widget.attrs['style'] = 'pointer-events: none; '
+            self.fields['education_check'].widget.attrs['tabindex'] = '-1'
 
 
 class QualityForm(forms.ModelForm):

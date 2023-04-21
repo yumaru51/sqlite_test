@@ -149,7 +149,7 @@ class Request(models.Model):
 
     completion_date = models.DateField('完了日', blank=True, null=True)
     application_date = models.DateField('申請日', blank=True, null=True, auto_now_add=True)
-    education_management_system_id = models.CharField('教育管理システムID', max_length=40, blank=True, null=True)
+    education_check = models.BooleanField('教育チェック', default=False)
 
     class Meta:
         db_table = 'quality_change_management_t_request'
