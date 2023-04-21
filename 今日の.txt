@@ -4,17 +4,5 @@ s-asano
 
 ④メールはどうだっけ？
 ⑤エラー仕込まないと
-
 ⑦lost_flag=0がないとこ多すぎてやばいかも！
 ⑧進捗履歴と進捗選択のデザイン
-
-
-必須を無くす方法！
-formのrequired=False
-
-
-評価確認でGL以上の人しか完了できないように。
-200
-
-y-hamaguchi
-k-takeshima

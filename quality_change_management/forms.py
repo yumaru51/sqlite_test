@@ -245,7 +245,7 @@ class LogForm(forms.ModelForm):
 
 
 class ProgressForm(forms.Form):
-    present_department = forms.ChoiceField(label='部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    present_department = forms.ChoiceField(label='部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select select2'}), initial='', required=False)
     present_step_id = forms.ChoiceField(label='進捗状況', choices=step_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     title = forms.CharField(label='変更管理名称', widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     work_class = forms.ChoiceField(label='作業区分', choices=work_class, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
