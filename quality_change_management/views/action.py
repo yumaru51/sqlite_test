@@ -342,36 +342,21 @@ def entry_progress(request):
                 present_operator=present_operator,
                 last_step=StepMaster.objects.get(step=present_step)
             )
-        else:
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
-            Progress.objects.create(
-                request_id=request_id,
-                target='safety',
-                present_step=StepMaster.objects.get(step=1501),
-                present_division=present_division,
-                present_department=present_department,
-                present_operator=present_operator,
-                last_step=StepMaster.objects.get(step=present_step)
-            )
 
-        # ただし安全評価レベルが2,3なら安全プログレスも作成。
-        if safety_aspect == 'Ⅱ' or safety_aspect == 'Ⅲ':
-            present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
-            present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
-            present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
-            Progress.objects.update_or_create(
-                request_id=request_id,
-                target='safety',
-                present_step=present_step,
-                defaults={'present_step': StepMaster.objects.get(step=1501),
-                          'present_division': present_division,
-                          'present_department': present_department,
-                          'present_operator': present_operator,
-                          'last_step': StepMaster.objects.get(step=present_step)
-                          }
-            )
+        # 安全のプログレスは必須。
+        present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+        present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
+        present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
+        Progress.objects.create(
+            request_id=request_id,
+            target='safety',
+            present_step=StepMaster.objects.get(step=1501),
+            present_division=present_division,
+            present_department=present_department,
+            present_operator=present_operator,
+            last_step=StepMaster.objects.get(step=present_step)
+        )
+
     # # # # # 「原課変更実施」(1401) # # # # #
 
     # # # # # 「所管承認結果」(1302) # # # # #
