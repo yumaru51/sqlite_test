@@ -213,9 +213,9 @@ def entry_progress(request):
             target='request',
             present_step=present_step,
             defaults={'present_step': StepMaster.objects.get(step=request.POST['next_step']),
-                      'present_division': DepartmentMaster.objects.get(department_cd=request.POST['next_department']).division_cd,
-                      'present_department': request.POST['next_department'],
-                      'present_operator': request.POST['next_operator'],
+                      'present_division': Request.objects.get(id=request_id).division,
+                      'present_department': Request.objects.get(id=request_id).department,
+                      'present_operator': Request.objects.get(id=request_id).user,
                       'last_step': StepMaster.objects.get(step=present_step)
                       }
         )
