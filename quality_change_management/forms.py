@@ -84,13 +84,13 @@ class RequestForm(forms.ModelForm):
 
     def __init__(self, edit, step, **kwargs):
         super(RequestForm, self).__init__(**kwargs)
+        self.fields['division'].widget.attrs['style'] = 'pointer-events: none; '
+        self.fields['division'].widget.attrs['tabindex'] = '-1'
+        self.fields['department'].widget.attrs['style'] = 'pointer-events: none; '
+        self.fields['department'].widget.attrs['tabindex'] = '-1'
+        self.fields['user'].widget.attrs['style'] = 'pointer-events: none; '
+        self.fields['user'].widget.attrs['tabindex'] = '-1'
         if edit == 'off' or step != 1102:  # editが「off」なら入力不可。
-            self.fields['division'].widget.attrs['style'] = 'pointer-events: none; '
-            self.fields['division'].widget.attrs['tabindex'] = '-1'
-            self.fields['department'].widget.attrs['style'] = 'pointer-events: none; '
-            self.fields['department'].widget.attrs['tabindex'] = '-1'
-            self.fields['user'].widget.attrs['style'] = 'pointer-events: none; '
-            self.fields['user'].widget.attrs['tabindex'] = '-1'
             self.fields['others'].widget.attrs['style'] = 'pointer-events: none; '
             self.fields['others'].widget.attrs['tabindex'] = '-1'
             self.fields['title'].widget.attrs['style'] = 'pointer-events: none; '

@@ -89,7 +89,7 @@ def top_page(request):
                                                    first().department).department_name,  # 兼務の場合、一番上のをメインとして扱っている。
         'progress_count_dict': progress_count_dict,
         'present_step_id': '',
-        'progress_dict': progress_dict,  # ログインユーザーが所属している全部門、全ステップの担当データを表示
+        'progress_dict': progress_dict,
         'progress_form': ProgressForm,  # 次作業者情報空
         # 'progress_form': ProgressForm(initial=dict(
             # present_department=UserAttribute.objects.filter(username=request.user).first().department,
@@ -287,17 +287,24 @@ def detail(request, present_step, target, request_id):
             'action_name': step_action_list.action.action_name,
         }
         index += 1
+
     # ②担当部署制御　ステップの担当部署にユーザー所属の担当部署が含まれるか否か
-    department_list = []  # ユーザー所属の担当部署リスト
-    for user_attribute in UserAttribute.objects.filter(username=request.user):
-        department_list.append(user_attribute.department)
-    department_cd_lists = department_lists(request, present_step)
-    for department_cd_list in department_cd_lists:
-        for department in department_list:
-            if department_cd_list == department:
+
+    # ステップの担当部署リスト(ステップ制御)
+    step_department_list = department_lists(request, present_step)
+
+    # ユーザーが所属している部署リスト(兼務対応)
+    user_department_list = []
+    for user_attribute in UserAttribute.objects.filter(username=request.user, lost_flag=0):
+        user_department_list.append(user_attribute.department)
+
+    for step_department in step_department_list:
+        for user_department in user_department_list:
+            if step_department == user_department:
+
                 # ③ユーザー制御
                 user_authority = StepMaster.objects.get(step=present_step, lost_flag=0).authority
-                if UserAttribute.objects.filter(username=request.user, department=department, authority__gte=user_authority, lost_flag=0).exists():
+                if UserAttribute.objects.filter(username=request.user, department=user_department, authority__gte=user_authority, lost_flag=0).exists():
                     authority_flag = 1
 
     params = {
