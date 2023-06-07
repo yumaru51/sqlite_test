@@ -13,7 +13,7 @@ if __name__ == '__main__':
     elif host_name == 'I7161DD6':
         print('テスト環境起動')
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.settings_test')
-    elif host_name == 'I7781DN7':
+    elif host_name == 'I8125DN7':
         print('開発環境1起動')
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.settings_develop1')
     else:
