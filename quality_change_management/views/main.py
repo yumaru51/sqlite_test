@@ -90,12 +90,12 @@ def top_page(request):
         'progress_count_dict': progress_count_dict,
         'present_step_id': '',
         'progress_dict': progress_dict,
-        'progress_form': ProgressForm,  # 次作業者情報空
-        # 'progress_form': ProgressForm(initial=dict(
-            # present_department=UserAttribute.objects.filter(username=request.user).first().department,
-            # next_department=UserAttribute.objects.filter(username=request.user).first().department,
-            # next_user=request.user
-        # )),
+        # 'progress_form': ProgressForm,  # 次作業者情報空
+        'progress_form': ProgressForm(initial=dict(
+            present_department=UserAttribute.objects.filter(username=request.user).first().department,
+            next_department=UserAttribute.objects.filter(username=request.user).first().department,
+            next_user=request.user
+        )),
     }
 
     if request.method == 'POST':
