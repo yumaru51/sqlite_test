@@ -27,11 +27,11 @@ def top_page(request):
           '通信:', '「'+request.method+'」', ';',)
 
     division_list = []  # ユーザーが所属している部門
-    for user_attribute in UserAttribute.objects.filter(username=request.user):
+    for user_attribute in UserAttribute.objects.filter(username=request.user, lost_flag=0):
         division_list.append(user_attribute.division)
 
     department_list = []  # ユーザーが所属している部署
-    for user_attribute in UserAttribute.objects.filter(username=request.user):
+    for user_attribute in UserAttribute.objects.filter(username=request.user, lost_flag=0):
         department_list.append(user_attribute.department)
 
     step_list = []  # フローに表示する有効ステップ

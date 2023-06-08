@@ -1,11 +1,11 @@
 
 【GitHub】
-①
+①個人はこっち
 yumaru51@yahoo.co.jp
 URL：https://github.com/yumaru51/isk-tools.git
 user：yumaru51
 pass：
-②
+②消す
 y-kawauchi@iskweb.co.jp
 URL：https://github.com/Kawauchi-Yuki/isk-tools.git
 user：Kawauchi-Yuki
@@ -13,16 +13,16 @@ pass：iskisk6117
 トークン：isk-tools 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
 
 【GitLab】
-①
+①会社はこっち
 URL：https://gitlab.com/shuji-esu/isk-tools.git
 user：shuji-esu
 pass：iskisk6117
-トークン：isk_bms_pj 6vF4sU9-2XXU2JYc4tsq
-②
+トークン：「isk_bms_pj」「6vF4sU9-2XXU2JYc4tsq」
+②消す
 URL：
 user：yumaru51
 pass：
-トークン：yumaru51 glpat-tg687x5AXjiihxfy_z6n
+トークン：「yumaru51」「glpat-tg687x5AXjiihxfy_z6n」
 
 【プロキシ】
 git config --global http.proxy 10.100.2.10:8080
