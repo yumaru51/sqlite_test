@@ -54,7 +54,8 @@ def action(request, function_name):
 
         # 各ボタンを押した後の挙動を設定する。続けて処理したい場合は登録後、詳細画面のままにする。
         if 'entry' in function_name:
-            return redirect('quality_change_management:detail', present_step, target, request_id)
+            # return redirect('quality_change_management:detail', present_step, target, request_id)
+            return redirect('quality_change_management:top_page')
         if 'approval' in function_name:
             return redirect('quality_change_management:top_page')
         if 'completed' in function_name:
@@ -107,6 +108,10 @@ def entry_request(request):
             obj = Request.objects.get(id=request_id)
             request_form = RequestForm(data=request.POST, instance=obj, edit=edit, step=present_step)
             request_form.save()
+            obj = Progress.objects.get(request_id=request_id)
+            obj.present_department = request.POST['next_department']
+            obj.present_operator = request.POST['next_operator']
+            obj.save()
 
     elif present_step == 1401:
         obj = Request.objects.get(id=request_id)
