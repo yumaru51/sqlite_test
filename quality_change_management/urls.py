@@ -11,7 +11,7 @@ urlpatterns = [
     path('detail/<int:present_step>/<str:target>/<int:request_id>/', main.detail, name='detail'),
     path('report/<int:export>/', main.report, name='report'),
     # entry処理
-    path('action/<function_name>/', action.action, name='action'),
+    path('action/<action_id>/', action.action, name='action'),
     # ajax処理
     path('ajax_next_step/', ajax.ajax_next_step, name='ajax_next_step'),
     path('ajax_department/', ajax.ajax_department, name='ajax_department'),

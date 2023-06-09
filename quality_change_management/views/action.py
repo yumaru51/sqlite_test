@@ -33,7 +33,7 @@ def output_log_exception(request, traceback_str):
 
 
 # ***action***
-def action(request, function_name):
+def action(request, action_id):
     try:
         request_id = request.session['request_id']
         print('「action」',
@@ -42,33 +42,33 @@ def action(request, function_name):
               'ユーザーID:', request.user, ';',
               'ID:', request_id, ';',
               '通信:', '「'+request.method+'」', ';',
-              'action_id:', function_name, ';',)
-        globals()[function_name](request)
+              'action_id:', action_id, ';',)
+        globals()[action_id](request)
 
         # ログ記述
-        entry_log(request, function_name)
+        entry_log(request, action_id)
 
         request_id = request.session['request_id']
         target = request.session['target']
         present_step = request.session['present_step']
 
         # 各ボタンを押した後の挙動を設定する。続けて処理したい場合は登録後、詳細画面のままにする。
-        if 'entry' in function_name:
+        if 'entry' in action_id:
             # return redirect('quality_change_management:detail', present_step, target, request_id)
             return redirect('quality_change_management:top_page')
-        if 'approval' in function_name:
+        if 'approval' in action_id:
             return redirect('quality_change_management:top_page')
-        if 'completed' in function_name:
+        if 'completed' in action_id:
             return redirect('quality_change_management:top_page')
-        if 'confirm' in function_name:
+        if 'confirm' in action_id:
             return redirect('quality_change_management:top_page')
-        if 'copy' in function_name:
+        if 'copy' in action_id:
             return
-        if 'print' in function_name:
+        if 'print' in action_id:
             return
-        if 'rejected' in function_name:
+        if 'rejected' in action_id:
             return HttpResponse("<script>alert('却下しました！');location.href = '../../';</script>")
-        if 'remand' in function_name:
+        if 'remand' in action_id:
             return redirect('quality_change_management:top_page')
         return redirect('quality_change_management:top_page')
 
@@ -450,17 +450,17 @@ def entry_progress(request):
 
 
 # logテーブル
-def entry_log(request, function_name):
+def entry_log(request, action_id):
     request_id = request.session['request_id']
     target = request.session['target']
     present_step = request.session['present_step']
-    function_name = function_name.replace('entry_', '')
-    function_name = function_name.replace('function_', '')
+    action_id = action_id.replace('entry_', '')
+    action_id = action_id.replace('function_', '')
 
     Log(target_id=target,
         target_table_id=request_id,
         step=StepMaster.objects.get(step=present_step),
-        action_id=function_name,
+        action_id=action_id,
         operation_datetime=datetime.datetime.now(),
         operator=request.user,
         operator_department=UserAttribute.objects.filter(username=request.user, lost_flag=0).order_by('display_order').first().department,
@@ -480,8 +480,8 @@ def function_approval(request):
 # 入力完了処理
 def function_completed(request):
     print('入力完了処理')
-    function_name = 'entry_' + request.session['target']
-    globals()[function_name](request)
+    action_id = 'entry_' + request.session['target']
+    globals()[action_id](request)
     entry_progress(request)
     return
 
