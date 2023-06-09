@@ -602,7 +602,7 @@ def function_remand(request):
     # logから最後の操作の情報を取得
     # 案①actionマスタを利用　進捗遷移するアクションの情報を持たせる(progress_transition=1)
     action_list = [action.get('action') for action in list(ActionMaster.objects.filter(progress_transition=1, lost_flag=0).values('action'))]
-    log = Log.objects.filter(target_table_id=request_id, action_id__in=action_list).order_by('-operation_datetime').first()
+    log = Log.objects.filter(target_table_id=request_id, action_id__in=action_list, step_id__lt=present_step).order_by('-operation_datetime').first()
     next_step = log.step_id
 
     # 案②step_relationを利用　差戻と分かる情報を持たせる(type='prev')
