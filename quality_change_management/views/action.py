@@ -169,9 +169,31 @@ def entry_progress(request):
 
     # # # # # 特殊並列処理 # # # # #
 
+    # # # # # 「原課登録編集」(1102) # # # # #
+    # # # # # 「原課登録編集」(1102) # # # # #
+
+    # # # # # 「原課登録承認」(1103) # # # # #
+    if present_step == 1103:
+
+        next_operator = UserAttribute.objects.filter(department=Request.objects.get(id=request_id).department).order_by('-authority').first()
+
+        Progress.objects.update_or_create(
+            request_id=request_id,
+            target=target,
+            present_step=present_step,
+            defaults={'present_step': StepMaster.objects.get(step=request.POST['next_step']),
+                      'present_division': DepartmentMaster.objects.get(department_cd=request.POST['next_department']).division_cd,
+                      'present_department': request.POST['next_department'],
+                      'present_operator': next_operator.username,
+                      'last_step': StepMaster.objects.get(step=present_step)
+                      }
+        )
+
+    # # # # # 「原課登録承認」(1103) # # # # #
+
     # # # # # 「原課部長承認」(1104) # # # # #
     # ①評価レベル0, 1と②評価レベル2, 3で分岐
-    if present_step == 1104:
+    elif present_step == 1104:
         safety_aspect = Request.objects.get(id=request_id).safety_aspect
         quality_aspect = Request.objects.get(id=request_id).quality_aspect
 
@@ -343,7 +365,7 @@ def entry_progress(request):
                 last_step=StepMaster.objects.get(step=present_step)
             )
 
-        # 安全のプログレスは必須。
+        # 安全プログレスは必須。
         present_division = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
         present_department = StepChargeDepartment.objects.get(step=1301, charge_department='KA&A', lost_flag=0).charge_department
         present_operator = UserAttribute.objects.get(department=present_department, authority=302, lost_flag=0).username
@@ -436,7 +458,7 @@ def entry_log(request, function_name):
         action_id=function_name,
         operation_datetime=datetime.datetime.now(),
         operator=request.user,
-        operator_department=UserAttribute.objects.filter(username=request.user, lost_flag=0).order_by('display_order').first().division,
+        operator_department=UserAttribute.objects.filter(username=request.user, lost_flag=0).order_by('display_order').first().department,
         comment=request.POST['comment']
         ).save()
     return
@@ -445,14 +467,14 @@ def entry_log(request, function_name):
 # ***function***
 # 承認処理
 def function_approval(request):
-    print('承認します')
+    print('承認処理')
     entry_progress(request)
     return
 
 
 # 入力完了処理
 def function_completed(request):
-    print('入力完了します')
+    print('入力完了処理')
     function_name = 'entry_' + request.session['target']
     globals()[function_name](request)
     entry_progress(request)
@@ -461,26 +483,26 @@ def function_completed(request):
 
 # 確認処理
 def function_confirm(request):
-    print('確認します')
+    print('確認処理')
     entry_progress(request)
     return
 
 
 # 複製処理
 def function_copy(request):
-    print('複製します')
+    print('複製処理')
     return
 
 
 # 出力処理
 def function_print(request):
-    print('出力します')
+    print('出力処理')
     return
 
 
 # 却下処理
 def function_rejected(request):
-    print('却下します')
+    print('却下処理')
 
     request_id = request.session['request_id']
     target = request.session['target']
@@ -562,7 +584,7 @@ def function_rejected(request):
 
 # 差戻処理
 def function_remand(request):
-    print('差戻します')
+    print('差戻処理')
 
     # todo コメント入力必須チェック
     # if request.POST['comment'] == '':
@@ -602,7 +624,7 @@ def function_remand(request):
 
 # 機能検証用
 def function_test(request):
-    print('テスト機能確認中')
+    print('機能検証用')
 
     request_id = request.session['request_id']
     target = request.session['target']
