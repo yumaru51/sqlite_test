@@ -239,7 +239,7 @@ def export_model_to_excel(model, output_file_path):
 def export_data(request):
     today = str(date.today())
     app_name = request.POST['app_name']
-    if host_name == 'I7781DN7':
+    if host_name == 'I8125DN7':
         output_folder_path = 'C:/Users/y-kawauchi/python_tool_development/sqlite_test/' + today + '_' + app_name
     else:
         output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/' + today + '_' + app_name
@@ -303,3 +303,98 @@ def test_function(request):
     }
 
     return render(request, 'app/app.html', data)
+
+
+def database_migration(request):
+    data = {
+        'message': 'EXPORT　or　IMPORT？',
+        'app_list': get_excluded_app_list(),
+        'app_name': '',
+        'model_name_list': '',
+    }
+    return render(request, 'app/database_migration.html', data)
+
+
+def database_export1(request):
+    app_name = request.POST['app_name']
+    app = apps.get_app_config(app_name)
+    model_list = app.get_models()
+    model_name_list = []
+
+    for model in model_list:
+        # print('App名：' + str(app) + ', Model名：' + model.__name__)
+        model_name_list.append(model.__name__)
+
+    data = {
+        'message': app_name + 'を選択しました。',
+        'app_list': get_excluded_app_list(),
+        'app_name': app_name,
+        'model_name_list': model_name_list,
+    }
+    return render(request, 'app/database_migration.html', data)
+
+
+def database_export2(request):
+
+    app_name = request.POST['app_name']
+    app = apps.get_app_config(app_name)
+
+    model_name_list = request.POST.getlist('modelNameCheckbox')
+    if host_name == 'I8125DN7':
+        output_folder_path = 'C:/Users/y-kawauchi/PycharmProjects/sqlite_test/データベースファイル/' + app_name
+    else:
+        output_folder_path = '/Users/kawauchiyuuki/PycharmProjects/sqlite_test/データベースファイル/' + app_name
+
+    if model_name_list:
+        Path(output_folder_path).mkdir(parents=True, exist_ok=True)
+
+        for model_name in model_name_list:
+            print(model_name)
+            model_data = app.get_model(model_name)
+            output_file_path = output_folder_path + '/' + model_name + ".xlsx"
+            export_model_to_excel(model_data, output_file_path)
+
+    data = {
+        'message': 'EXPORT完了',
+        'app_list': get_excluded_app_list(),
+        'app_name': app_name,
+        'model_name_list': '',
+    }
+    return render(request, 'app/database_migration.html', data)
+
+
+def database_import(request):
+    app_name = request.POST['app_name']
+
+    if request.FILES.__len__() == 0:
+        data = {
+            'message': 'フォルダを選択していません。',
+            'app_list': get_excluded_app_list(),
+            'app_name': app_name,
+            'model_name_list': '',
+        }
+        return render(request, 'app/database_migration.html', data)
+
+    else:
+        for file in request.FILES.getlist('import_file'):
+            file_name, ext = os.path.splitext(file.name)
+
+            # ModelClass指定でModel情報取得
+            model_data = apps.get_model(app_name, file_name)
+
+            # Delete処理
+            model_string = f'{app_name}.{file_name}'
+            print(model_string)
+            model = apps.get_model(model_string)
+            model.objects.all().delete()
+
+            import_excel_to_model(model_data, file_name, file)
+
+    data = {
+        'message': 'IMPORT完了',
+        'app_list': get_excluded_app_list(),
+        'app_name': app_name,
+        'model_name_list': '',
+    }
+    return render(request, 'app/database_migration.html', data)
+
