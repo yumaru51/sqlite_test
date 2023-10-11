@@ -30,7 +30,13 @@ level_list = [
     ('継続', '継続'),
     ('一過性', '一過性'),
 ]
-aspect_list = [
+safety_list = [
+    ('', ''),
+    ('Ⅰ', 'Ⅰ'),
+    ('Ⅱ', 'Ⅱ'),
+    ('Ⅲ', 'Ⅲ'),
+]
+quality_list = [
     ('', ''),
     ('0', '0'),
     ('Ⅰ', 'Ⅰ'),
@@ -73,8 +79,8 @@ class RequestForm(forms.ModelForm):
     outline = forms.CharField(label='変更内容概略', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 60}), required=True)
     level = forms.ChoiceField(label='継続/一過性', choices=level_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
     treatment = forms.CharField(label='リスク低減処置', widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
-    safety_aspect = forms.ChoiceField(label='安全面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
-    quality_aspect = forms.ChoiceField(label='品質面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
+    safety_aspect = forms.ChoiceField(label='安全面', choices=safety_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
+    quality_aspect = forms.ChoiceField(label='品質面', choices=quality_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='')
     delivery_date = forms.DateField(label='変更希望日', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=True)
 
     class Meta:
@@ -151,7 +157,7 @@ class Request3Form(forms.ModelForm):
 
 
 class QualityForm(forms.ModelForm):
-    quality_aspect = forms.ChoiceField(label='所管評価レベル', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    quality_aspect = forms.ChoiceField(label='所管評価レベル', choices=quality_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     judgement = forms.ChoiceField(label='判定', choices=judgement_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     results = forms.CharField(label='対策検討結果', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 60}), initial='', required=False)
 
@@ -173,7 +179,7 @@ class QualityForm(forms.ModelForm):
 
 
 class SafetyForm(forms.ModelForm):
-    safety_aspect = forms.ChoiceField(label='所管評価レベル', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    safety_aspect = forms.ChoiceField(label='所管評価レベル', choices=safety_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     judgement = forms.ChoiceField(label='判定', choices=judgement_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     results = forms.CharField(label='対策検討結果', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 60}), initial='', required=False)
 
@@ -251,8 +257,8 @@ class ProgressForm(forms.Form):
     work_class = forms.ChoiceField(label='作業区分', choices=work_class, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     delivery_date_from = forms.DateField(label='変更日_FROM', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=False)
     delivery_date_to = forms.DateField(label='変更日_TO', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=False)
-    safety_aspect = forms.ChoiceField(label='安全面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
-    quality_aspect = forms.ChoiceField(label='品質面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    safety_aspect = forms.ChoiceField(label='安全面', choices=safety_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    quality_aspect = forms.ChoiceField(label='品質面', choices=quality_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     # next_department = forms.ChoiceField(label='次作業者部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select', 'onchange': 'change_user(this.value);'}), initial='', required=False)
     next_department = forms.ChoiceField(label='次作業者部署名', choices=department_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select select2'}), initial='', required=False)
     next_user = forms.ChoiceField(label='次作業者', choices=user_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
@@ -268,8 +274,8 @@ class ReportForm(forms.Form):
     work_class = forms.ChoiceField(label='作業区分', choices=work_class, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     completion_date_from = forms.DateField(label='完了日_FROM', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=False)
     completion_date_to = forms.DateField(label='完了日_TO', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=False)
-    safety_aspect = forms.ChoiceField(label='安全面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
-    quality_aspect = forms.ChoiceField(label='品質面', choices=aspect_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    safety_aspect = forms.ChoiceField(label='安全面', choices=safety_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
+    quality_aspect = forms.ChoiceField(label='品質面', choices=quality_list, widget=forms.Select(attrs={'size': 1, 'class': 'form-select'}), initial='', required=False)
     display_class = forms.MultipleChoiceField(label='　', choices=display_class, widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline_display_class'}), required=False)
     # test = forms.MultipleChoiceField(label='変更対象', choices=display_class, widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline_display_class'}), required=False)
 

@@ -48,7 +48,7 @@ python manage.py startapp fms
 python manage.py runserver
 
 python manage.py makemigrations
-python manage.py migrate --database=quality_change_management
+python manage.py migrate --database=quality_change_management[DB名]
 python manage.py createsuperuser
 
 【マイグレーション】
@@ -56,6 +56,8 @@ python manage.py createsuperuser
 ②マイグレーション時に、runserverで起動確認されるため、実行エラーとなる。
 ③urls.pyで各appsへのurlをコメントアウトして、実行エラーとならないようにする。
 ④マイグレートはデータベース毎にしないといけない。(アプリケーション毎とごっちゃにならないように)
+※テーブル名指定しないと「app名_class名」となる。
+※「models.py」で「managed=False」としたらテーブル作られない。
 
 【static】
 python manage.py collectstatic
