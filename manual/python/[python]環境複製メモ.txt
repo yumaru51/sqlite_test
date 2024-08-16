@@ -17,7 +17,7 @@ pass：iskisk6117
 URL：https://gitlab.com/shuji-esu/isk-tools.git
 user：shuji-esu
 pass：iskisk6117
-トークン：「isk_bms_pj」「6vF4sU9-2XXU2JYc4tsq」
+トークン：「isk_bms_pj」「glpat-fZsDG5kRGNmzC3NACeez」　✕「6vF4sU9-2XXU2JYc4tsq」
 ②消す
 URL：
 user：yumaru51

@@ -1,3 +1,7 @@
+DQL（Data Query Language、データクエリ言語）
+DML（Data Manipulation Language、データ操作言語）
+DDL（Data Definition Language、データ定義言語）
+CRUD：Create（作成）、Read（読み取り）、Update（更新）、Delete（削除）
 
 【SQLrule】
 インデント　Tab　青文字毎に、SELECT１行１項目

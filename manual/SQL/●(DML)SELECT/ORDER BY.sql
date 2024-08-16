@@ -1,1 +1,0 @@
-SELECT * FROM [Kawauchi_DB].[dbo].[TableのCreate_スクリプト作成] ORDER BY 給料 ASC
