@@ -398,3 +398,6 @@ def database_import(request):
     }
     return render(request, 'app/database_migration.html', data)
 
+
+def home(request):
+    return render(request, 'app/home.html')

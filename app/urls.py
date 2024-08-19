@@ -14,4 +14,6 @@ urlpatterns = [
     path('import_data/', views.import_data, name='import_data'),
     path('export_data/', views.export_data, name='export_data'),
     path('test_function/', views.test_function, name='test_function'),
+
+    path('home/', views.home, name='home'),
 ]

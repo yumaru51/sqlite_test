@@ -34,6 +34,7 @@ C:\python_tool_development\isk-tools
 "cmd.exe" /k ""C:\python_tool_development\isk-tools\Scripts\activate.bat""
 
 【ターミナルコマンド】
+python --version
 python -m django --version
 django.get_version()
 
@@ -50,21 +51,6 @@ python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate --database=quality_change_management[DB名]
 python manage.py createsuperuser
-
-【マイグレーション】
-①リセットしたい場合は、各appsフォルダのmigrationsフォルダの__pycache__と__init__.py以外を削除
-②マイグレーション時に、runserverで起動確認されるため、実行エラーとなる。
-③urls.pyで各appsへのurlをコメントアウトして、実行エラーとならないようにする。
-④マイグレートはデータベース毎にしないといけない。(アプリケーション毎とごっちゃにならないように)
-※テーブル名指定しないと「app名_class名」となる。
-※「models.py」で「managed=False」としたらテーブル作られない。
-
-【static】
-python manage.py collectstatic
-
-【ライブラリ一括DL】
-プロジェクトフォルダ内の「requirements.txt」に記入しておくとpycharmが読み込んでインストールするか聞いてくれる。
-pip install ライブラリ==version
 
 【Anacondaのインタプリタは不要！メリット！】
 　ネットでpythonをダウンロードしてインタプリタに設定すればpythonファイルは動作可能。
@@ -84,7 +70,6 @@ pip install ライブラリ==version
         　14: 2017,
     　}
         　15: 2018,を書き加えるとアクセスできる
-
 
 【環境構築時DLLエラー】
 　Anacondaインストールフォルダ以下Libraryフォルダ内にある以下2ファイルをDLLフォルダにコピーで解消。
