@@ -1,0 +1,30 @@
+'開く
+DoCmd.OpenForm
+DoCmd.OpenReport
+
+'データシートビューで開く
+DoCmd.OpenForm "YourFormName", View:=acFormDS, WindowMode:=acWindowNormal
+
+'フォームを開く
+DoCmd.OpenForm "YourFormName", View:=acNormal, WindowMode:=acWindowNormal
+
+'フォームを動的にして開く＆コントロール操作
+Dim formNm As String
+formNm = "フォーム名"
+DoCmd.OpenForm formNm
+Forms(formNm).Controls("コントロール名").Value = 値
+
+'コントロール操作
+Forms("フォーム名").コントロール名.Value = 値
+Forms!フォーム名!コントロール名 = 値
+
+'サブフォーム操作操作
+サブフォーム名.SourceObject = "FormName"
+サブフォーム名.Form.RecordSource = "SELECT * FROM table"
+
+'マウスポインタを砂時計に
+DoCmd.Hourglass True
+
+'マウスを元に戻す
+DoCmd.Hourglass False
+

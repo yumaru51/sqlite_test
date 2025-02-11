@@ -1,0 +1,15 @@
+
+Private Sub suストアド()
+On Error GoTo Err_suストアド
+	
+	MsgBox "処理"
+	Exit Sub
+
+Err_suストアド:
+	MsgBox "エラー番号:" & Err.Number
+    	MsgBox "エラー内容：" & Err.Description
+    	MsgBox "ヘルプファイル名" & Err.HelpContext
+    	MsgBox "プロジェクト名：" & Err.Source
+    	Resume Next
+End Sub
+

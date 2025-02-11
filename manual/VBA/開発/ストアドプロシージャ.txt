@@ -1,0 +1,33 @@
+
+●プロシージャの引数の設定
+　Sub プロシージャ名(Optional ByVal 引数1 as String = 初期値省略可, ByVal 引数2 as String,,,)
+　Sub プロシージャ名(ByRef 引数1 as String, ByRef 引数2 as String,,,)
+
+●ByValは呼び出し先内だけで扱うPrivate変数
+　ByRefは呼び出し元にも影響を出せるPublic変数のイメージ
+　（※ただし、引数として渡して紐づけを行う必要がある。同じ名前だから自動で変更が反映されるわけではない。）
+　プロシージャ内で処理した値を呼び出し元に返した場合ByRefを使うとよさそう。
+
+●Subはフォームからのイベントだけで、処理は全てFunctionでよい！！！！！
+
+【Sub：サブルーチン】
+●戻り値がないため、単独で実行できる。
+●以下呼び出し例、Callは省略できる。
+　Call suストアドプロシージャ名(parameter1, parameter2)
+　suストアドプロシージャ名 parameter1, parameter2
+　※NG　Set 変数 = Call suストアドプロシージャ名
+●終了は、Exit Sub
+
+【Function：ファンクション】
+●戻り値があるため、SubかFunctionから呼ばれて実行する。
+●戻り値を得るため、fn関数内で自分自身に値を手動で格納する。
+　例　fn関数名 = 0など
+　または「ByRef」、「グローバル変数」
+●呼び出しはcall不要、関数名のみでよい！
+　戻り値をSetに格納するのが一般的！IFの条件に仕掛けてもよい！
+　　例　result = fn関数名　(またはSet 変数 = fn関数名)
+　　例　if fn関数名 = 0 Then
+●終了は、Exit Function
+
+「sub function 違い」https://curio1.net/excel/difference-function-sub/
+

@@ -1,0 +1,5 @@
+
+●MsgBox "TEST" & "です", vbExclamation, "タイトル"
+パラメータ：vbCritical、vbExclamation
+●改行は「& vbCrLf」
+

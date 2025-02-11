@@ -1,0 +1,2 @@
+アプリ起動
+start notepad
